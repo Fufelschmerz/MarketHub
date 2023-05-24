@@ -6,4 +6,9 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Core\MarketHub.Application\MarketHub.Application.csproj" />
+      <ProjectReference Include="..\..\Infrastructure\Infrastructure.API\Infrastructure.API.csproj" />
+    </ItemGroup>
+
 </Project>

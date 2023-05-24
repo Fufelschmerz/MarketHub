@@ -7,7 +7,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Contracts\Area\Common\Account" />
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Infrastructure\Infrastructure.Application\Infrastructure.Application.csproj" />
+      <ProjectReference Include="..\MarketHub.Domain\MarketHub.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Services" />
     </ItemGroup>
 
 </Project>
