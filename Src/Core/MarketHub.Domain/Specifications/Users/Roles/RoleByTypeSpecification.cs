@@ -6,8 +6,8 @@ using Infrastructure.Specifications;
 
 public sealed class RoleByTypeSpecification : Specification<Role>
 {
-    public RoleByTypeSpecification(RoleType type)
+    public RoleByTypeSpecification(RoleType roleType)
     {
-        Query.Where(x => x.Type == type);
+        Query.Where(x => x.RoleType == roleType);
     }
 }

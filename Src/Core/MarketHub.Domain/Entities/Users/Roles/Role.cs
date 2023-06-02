@@ -10,21 +10,21 @@ public sealed class Role : Entity,
 {
     private readonly List<User> _users = new();
 
-    public Role()
+    private Role()
     {
     }
 
-    public Role(RoleType type,
+    public Role(RoleType roleType,
         string name)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentNullException(nameof(name));
 
         Name = name;
-        Type = type;
+        RoleType = roleType;
     }
 
-    public RoleType Type { get; private set; }
+    public RoleType RoleType { get; private set; }
 
     public string Name { get; private set; }
 

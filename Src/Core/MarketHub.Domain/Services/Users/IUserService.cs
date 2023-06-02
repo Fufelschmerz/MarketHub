@@ -2,15 +2,11 @@
 
 using Infrastructure.Domain.Services;
 using MarketHub.Domain.Entities.Users;
-using MarketHub.Domain.Entities.Users.Roles;
-using MarketHub.Domain.Services.Common.UniqueName;
+using Common.UniqueName;
 
 public interface IUserService : IDomainService,
     IUniqueNameService<User>
 {
-    Task<User> CreateAsync(string name,
-        string email,
-        string password,
-        IEnumerable<Role> roles,
+    Task CreateAsync(User user,
         CancellationToken cancellationToken = default);
 }

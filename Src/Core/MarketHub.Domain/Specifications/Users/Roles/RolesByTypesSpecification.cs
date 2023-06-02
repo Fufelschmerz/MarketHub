@@ -8,6 +8,6 @@ public sealed class RolesByTypesSpecification : Specification<Role>
 {
     public RolesByTypesSpecification(IEnumerable<RoleType> roleTypes)
     {
-        Query.Where(x => roleTypes.Contains(x.Type));
+        Query.Where(x => roleTypes.Contains(x.RoleType));
     }
 }

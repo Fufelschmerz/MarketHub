@@ -20,19 +20,9 @@ public sealed class User : Entity,
         string password,
         IEnumerable<Role> roles)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentNullException(nameof(name));
-
-        if (string.IsNullOrWhiteSpace(email))
-            throw new ArgumentNullException(nameof(email));
-
-        if (string.IsNullOrWhiteSpace(password))
-            throw new ArgumentNullException(nameof(password));
-
-        Name = name;
-        Email = email;
-        Password = new(password);
-
+        SetName(name);
+        SetEmail(email);
+        SetPassword(password);
         AddRoles(roles);
     }
 
@@ -45,6 +35,27 @@ public sealed class User : Entity,
     public Password Password { get; private set; }
 
     public IEnumerable<Role> Roles => _roles.AsEnumerable();
+
+    public void SetName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentNullException(nameof(name));
+
+        Name = name;
+    }
+
+    protected internal void SetEmail(string email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+            throw new ArgumentNullException(nameof(email));
+
+        Email = email;
+    }
+
+    protected internal void SetPassword(string password)
+    {
+        Password = new(password);
+    }
 
     protected internal void AddRoles(IEnumerable<Role> roles)
     {

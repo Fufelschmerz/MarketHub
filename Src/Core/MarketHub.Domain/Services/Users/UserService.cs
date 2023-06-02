@@ -1,11 +1,10 @@
 ﻿namespace MarketHub.Domain.Services.Users;
 
 using MarketHub.Domain.Entities.Users;
-using MarketHub.Domain.Entities.Users.Roles;
 using MarketHub.Domain.Exceptions.Users;
 using MarketHub.Domain.Repositories.Users;
-using MarketHub.Domain.Services.Common.UniqueName.Extensions;
-using MarketHub.Domain.Specifications;
+using Common.UniqueName.Extensions;
+using Specifications;
 using MarketHub.Domain.Specifications.Users;
 
 public sealed class UserService : IUserService
@@ -17,17 +16,9 @@ public sealed class UserService : IUserService
         _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
     }
 
-    public async Task<User> CreateAsync(string name,
-        string email,
-        string password,
-        IEnumerable<Role> roles,
+    public async Task CreateAsync(User user,
         CancellationToken cancellationToken = default)
     {
-        User user = new(name,
-            email,
-            password,
-            roles);
-
         await this.CheckNameIsPossibleAsync(user,
             user.Name,
             cancellationToken);
@@ -38,8 +29,6 @@ public sealed class UserService : IUserService
 
         await _userRepository.AddAsync(user,
             cancellationToken);
-
-        return user;
     }
 
     public Task<User?> FindWithSameNameAsync(string newName,
