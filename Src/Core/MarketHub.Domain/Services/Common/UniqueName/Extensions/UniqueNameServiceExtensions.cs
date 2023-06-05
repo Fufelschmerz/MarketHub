@@ -5,8 +5,7 @@ using Exceptions;
 
 internal static class UniqueNameServiceExtensions
 {
-    internal static async Task CheckNameIsPossibleAsync<T>(this IUniqueNameService<T> uniqueNameService,
-        T objectWithUniqueName,
+    internal static async Task CheckNameIsPossibleAsync<T>(this UniqueNameService<T> uniqueNameService,
         string newName,
         CancellationToken cancellationToken = default) where T : IHasUniqueName
     {
@@ -14,7 +13,7 @@ internal static class UniqueNameServiceExtensions
             newName,
             cancellationToken);
 
-        if (existingObject != null && !Equals(objectWithUniqueName, existingObject))
+        if (existingObject != null)
             throw new ObjectWithSameNameAlreadyExistsException(
                 $"{typeof(T).Name} with name {newName} already exists");
     }

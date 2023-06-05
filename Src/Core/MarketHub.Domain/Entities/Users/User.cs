@@ -44,7 +44,7 @@ public sealed class User : Entity,
         Name = name;
     }
 
-    protected internal void SetEmail(string email)
+    public void SetEmail(string email)
     {
         if (string.IsNullOrWhiteSpace(email))
             throw new ArgumentNullException(nameof(email));

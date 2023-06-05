@@ -2,8 +2,8 @@
 
 using Enums;
 using Infrastructure.Domain.Entities;
-using MarketHub.Domain.Abstractions;
-using MarketHub.Domain.Entities.Users;
+using Abstractions;
+using Users;
 
 public sealed class Role : Entity,
     IHasName

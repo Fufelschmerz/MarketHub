@@ -3,7 +3,6 @@
 using Confirmations;
 using Entities.Accounts;
 using Entities.Accounts.Confirmations;
-using Entities.Users;
 using Events.Account.Confirmations;
 using Exceptions.Accounts;
 using Exceptions.Accounts.Confirmations;
@@ -24,17 +23,13 @@ public sealed class AccountService : IAccountService
         IConfirmationTokenGenerator confirmationTokenGenerator)
     {
         _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
-        _emailConfirmationRepository = emailConfirmationRepository ??
-                                       throw new ArgumentNullException(nameof(emailConfirmationRepository));
-        _confirmationTokenGenerator = confirmationTokenGenerator ??
-                                      throw new ArgumentNullException(nameof(confirmationTokenGenerator));
+        _emailConfirmationRepository = emailConfirmationRepository ?? throw new ArgumentNullException(nameof(emailConfirmationRepository));
+        _confirmationTokenGenerator = confirmationTokenGenerator ?? throw new ArgumentNullException(nameof(confirmationTokenGenerator));
     }
 
-    public async Task<Account> BeginRegistrationAsync(User user,
+    public async Task BeginRegistrationAsync(Account account,
         CancellationToken cancellationToken = default)
     {
-        Account account = new(user);
-
         await CheckIsAccountWithUserExistsAsync(account,
             cancellationToken);
 
@@ -50,8 +45,6 @@ public sealed class AccountService : IAccountService
             cancellationToken);
 
         account.RaiseDomainEvent(new EmailConfirmationRequiredEvent(emailConfirmation));
-
-        return account;
     }
 
     public async Task CompleteRegistrationAsync(Account account,
@@ -79,8 +72,7 @@ public sealed class AccountService : IAccountService
         Account? existingAccount = await _accountRepository.SingleOrDefaultAsync(accountByUserSpec,
             cancellationToken);
 
-        if (existingAccount != null && !Equals(account,
-                existingAccount))
+        if (existingAccount != null)
             throw new AccountWithSameUserAlreadyExistsException("Account with user already exists");
     }
 }

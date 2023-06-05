@@ -2,9 +2,9 @@
 
 using Abstractions;
 
-public interface IUniqueNameService<T>
+public abstract class UniqueNameService<T>
     where T : IHasUniqueName
-{
-    Task<T?> FindWithSameNameAsync(string newName,
+{ 
+    protected internal abstract Task<T?> FindWithSameNameAsync(string newName,
         CancellationToken cancellationToken = default);
 }
