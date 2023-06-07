@@ -15,7 +15,7 @@ public static class ApiExceptionExtensionCodes
     public const int ObjectWithSameNameAlreadyExists = 1001;
 
     [MapDomainException(typeof(UserWithSameEmailAlreadyExistsException))]
-    public const int ClientWithSameEmailAlreadyExists = 1002;
+    public const int UserWithSameEmailAlreadyExists = 1002;
 
     [MapDomainException(typeof(InvalidConfirmationTokenException))]
     public const int InvalidConfirmationToken = 1003;
@@ -25,7 +25,6 @@ public static class ApiExceptionExtensionCodes
 
     [MapDomainException(typeof(AccountWithSameUserAlreadyExistsException))]
     public const int AccountWithSameUserAlreadyExists = 1005;
-
-    [MapDomainException(typeof(UserWithSameEmailAlreadyExistsException))]
-    public const int UserWithSameEmailAlreadyExists = 1006;
+    
+    public const int WrongCredentials = 1008;
 }

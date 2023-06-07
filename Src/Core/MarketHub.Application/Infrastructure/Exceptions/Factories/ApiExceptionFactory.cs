@@ -34,6 +34,9 @@ public static class ApiExceptionFactory
     public static ApiException ObjectNotFound => new(ApiExceptionExtensionCodes.ObjectNotFound,
         "Object not found");
 
+    public static ApiException WrongCredentials => new(ApiExceptionExtensionCodes.WrongCredentials,
+        "Wrong credentials");
+    
     public static Exception TryMap(Exception exception)
     {
         return ExtensionCodes.TryGetValue(exception.GetType(),
