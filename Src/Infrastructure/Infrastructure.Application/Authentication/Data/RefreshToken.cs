@@ -1,6 +1,6 @@
 ﻿namespace Infrastructure.Application.Authentication.Data;
 
-public sealed record RefreshTokenDto(string Token,
+public sealed record RefreshToken(string Token,
     DateTime CreatedAtUtc,
     TimeSpan Expires)
 {

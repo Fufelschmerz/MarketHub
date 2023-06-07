@@ -2,6 +2,7 @@
 
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using Constants;
 using Data;
 using Options;
@@ -37,7 +38,12 @@ public sealed class JwtTokenBuilder : IJwtTokenBuilder
         string jwtToken = new JwtSecurityTokenHandler()
             .WriteToken(jwtSecurityToken);
 
+        RefreshToken refreshToken = new(Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+            DateTime.UtcNow,
+            _jwtTokenOptions.RefreshTokenExpires);
+
         return new JwtToken(jti,
-            jwtToken);
+            jwtToken,
+            refreshToken);
     }
 }
