@@ -47,7 +47,7 @@ void ConfigureContainer()
 {
     builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
     {
-        containerBuilder.RegisterConfiguredModulesFromAssemblyContaining<Program>(builder.Configuration);
+        containerBuilder.RegisterConfiguredModulesFromCurrentAssembly(builder.Configuration);
     });
 }
 
