@@ -26,14 +26,14 @@ public sealed class AccountController : MarketHubApiController
     [HttpPost]
     [Route("begin-registration")]
     [AllowAnonymous]
-    public Task<IActionResult> BeginRegistration(AccountBeginRegistrationRequest request) =>
+    public Task<IActionResult> BeginRegistration(BeginRegistrationRequest request) =>
         this.RequestAsync(request);
 
     [HttpPost]
     [Route("login")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(AccountLoginResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> Login(AccountLoginRequest request) =>
-        this.RequestAsync<AccountLoginRequest, AccountLoginResponse>(request);
+    public Task<IActionResult> Login(LoginRequest request) =>
+        this.RequestAsync<LoginRequest, LoginResponse>(request);
 }

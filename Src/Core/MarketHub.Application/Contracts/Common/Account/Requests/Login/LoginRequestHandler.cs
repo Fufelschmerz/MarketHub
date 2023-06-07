@@ -5,22 +5,22 @@ using Infrastructure.Exceptions.Factories;
 using Services.AuthenticationServices;
 using MediatR;
 
-public sealed class AccountLoginRequestHandler : IRequestHandler<AccountLoginRequest, AccountLoginResponse>
+public sealed class LoginRequestHandler : IRequestHandler<LoginRequest, LoginResponse>
 {
     private readonly IAuthenticationService _authenticationService;
 
-    public AccountLoginRequestHandler(IAuthenticationService authenticationService)
+    public LoginRequestHandler(IAuthenticationService authenticationService)
     {
         _authenticationService = authenticationService ?? throw new ArgumentNullException(nameof(authenticationService));
     }
 
-    public async Task<AccountLoginResponse> Handle(AccountLoginRequest request,
+    public async Task<LoginResponse> Handle(LoginRequest request,
         CancellationToken cancellationToken)
     {
         JwtToken jwtToken = await _authenticationService.LoginAsync(request.Email,
             request.Password,
             cancellationToken) ?? throw ApiExceptionFactory.WrongCredentials;
 
-        return new AccountLoginResponse(jwtToken.Token);
+        return new LoginResponse(jwtToken.Token);
     }
 }

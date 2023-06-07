@@ -1,3 +1,3 @@
 ﻿namespace MarketHub.Application.Contracts.Common.Account.Requests.Login;
 
-public sealed record AccountLoginResponse(string AccessToken);
+public sealed record LoginResponse(string AccessToken);

@@ -9,7 +9,7 @@ using global::Infrastructure.Domain.Events;
 using MediatR;
 using Services.QueryServices.Roles;
 
-public sealed class AccountBeginRegistrationRequestHandler : IRequestHandler<AccountBeginRegistrationRequest>
+public sealed class BeginRegistrationRequestHandler : IRequestHandler<BeginRegistrationRequest>
 {
     private readonly IRoleQueryService _roleQueryService;
 
@@ -18,7 +18,7 @@ public sealed class AccountBeginRegistrationRequestHandler : IRequestHandler<Acc
 
     private readonly IMediator _mediator;
 
-    public AccountBeginRegistrationRequestHandler(IRoleQueryService roleQueryService,
+    public BeginRegistrationRequestHandler(IRoleQueryService roleQueryService,
         IUserService userService,
         IAccountService accountService,
         IMediator mediator)
@@ -29,7 +29,7 @@ public sealed class AccountBeginRegistrationRequestHandler : IRequestHandler<Acc
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
-    public async Task Handle(AccountBeginRegistrationRequest request,
+    public async Task Handle(BeginRegistrationRequest request,
         CancellationToken cancellationToken)
     {
         IReadOnlyList<Role> roles = await _roleQueryService.FindRolesByTypesAsync(request.RoleTypes,
