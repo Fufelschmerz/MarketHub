@@ -8,34 +8,34 @@ public static class ConfiguredModulesContainerBuilderExtensions
 {
     public static ContainerBuilder RegisterConfiguredModulesFromAssemblyContaining<TType>(
         this ContainerBuilder containerBuilder,
-        IConfiguration configuration)
-    {
-        return RegisterConfiguredModulesFromAssembly(
+        IConfiguration configuration) =>
+        RegisterConfiguredModulesFromAssembly(
             containerBuilder,
-            typeof(TType).Assembly,
+            typeof(TType).Assembly, 
             configuration);
-    }
 
-    public static ContainerBuilder RegisterConfiguredModulesFromCurrentAssembly(this ContainerBuilder containerBuilder,
-        IConfiguration configuration)
-    {
-        return RegisterConfiguredModulesFromAssembly(
+    public static ContainerBuilder RegisterConfiguredModulesFromCurrentAssembly(
+        this ContainerBuilder containerBuilder, 
+        IConfiguration configuration) =>
+        RegisterConfiguredModulesFromAssembly(
             containerBuilder,
-            Assembly.GetCallingAssembly(),
+            Assembly.GetCallingAssembly(), 
             configuration);
-    }
 
-    private static ContainerBuilder RegisterConfiguredModulesFromAssembly(this ContainerBuilder containerBuilder,
+
+
+    private static ContainerBuilder RegisterConfiguredModulesFromAssembly(
+        this ContainerBuilder containerBuilder,
         Assembly assembly,
         IConfiguration configuration)
     {
-        if (containerBuilder is null)
+        if (containerBuilder == null)
             throw new ArgumentNullException(nameof(containerBuilder));
 
-        if (configuration is null)
+        if (configuration == null)
             throw new ArgumentNullException(nameof(configuration));
 
-        ContainerBuilder metaContainerBuilder = new();
+        var metaContainerBuilder = new ContainerBuilder();
 
         metaContainerBuilder
             .RegisterInstance(configuration);
@@ -47,7 +47,7 @@ public static class ConfiguredModulesContainerBuilderExtensions
             .PropertiesAutowired();
 
         using IContainer metaContainer = metaContainerBuilder.Build();
-
+        
         foreach (IModule module in metaContainer.Resolve<IEnumerable<IModule>>())
             containerBuilder.RegisterModule(module);
 
