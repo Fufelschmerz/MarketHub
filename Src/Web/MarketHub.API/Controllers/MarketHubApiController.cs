@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-internal abstract class MarketHubApiController : ApiController
+public abstract class MarketHubApiController : ApiController
 {
-    protected internal MarketHubApiController(IUnitOfWork unitOfWork,
+    protected MarketHubApiController(IUnitOfWork unitOfWork,
         IMediator mediator,
         ILogger<ApiController> logger)
         : base(unitOfWork,
