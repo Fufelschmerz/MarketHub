@@ -36,7 +36,7 @@ namespace MarketHub.Persistence.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Type = table.Column<int>(type: "integer", nullable: false),
+                    RoleType = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false)
                 },
                 constraints: table =>
@@ -107,7 +107,7 @@ namespace MarketHub.Persistence.Migrations
 
             migrationBuilder.InsertData(
                 table: "Roles",
-                columns: new[] { "Id", "Name", "Type" },
+                columns: new[] { "Id", "Name", "RoleType" },
                 values: new object[,]
                 {
                     { 1L, "Администратор", 1 },
