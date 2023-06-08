@@ -8,16 +8,16 @@ using Data;
 using Options;
 using Microsoft.IdentityModel.Tokens;
 
-public sealed class JwtTokenBuilder : IJwtTokenBuilder
+public sealed class AccessBuilder : IAccessBuilder
 {
-    private readonly JwtTokenOptions _jwtTokenOptions;
+    private readonly JwtOptions _jwtOptions;
 
-    public JwtTokenBuilder(JwtTokenOptions jwtTokenOptions)
+    public AccessBuilder(JwtOptions jwtOptions)
     {
-        _jwtTokenOptions = jwtTokenOptions ?? throw new ArgumentNullException(nameof(jwtTokenOptions));
+        _jwtOptions = jwtOptions ?? throw new ArgumentNullException(nameof(jwtOptions));
     }
 
-    public JwtToken BuildJwtToken(Claim[] claims)
+    public AccessToken BuildAccessToken(Claim[] claims)
     {
         bool shouldAddAudienceClaim = string.IsNullOrWhiteSpace(claims
             .FirstOrDefault(x => x.Type == ClaimNames.Aud)?.Value);
@@ -28,22 +28,23 @@ public sealed class JwtTokenBuilder : IJwtTokenBuilder
             throw new ArgumentNullException(nameof(jti));
 
         JwtSecurityToken jwtSecurityToken = new(
-            _jwtTokenOptions.Issuer,
-            shouldAddAudienceClaim ? _jwtTokenOptions.Audience : string.Empty,
+            _jwtOptions.Issuer,
+            shouldAddAudienceClaim ? _jwtOptions.Audience : string.Empty,
             claims,
-            expires: DateTime.UtcNow.Add(_jwtTokenOptions.AccessTokenExpires),
-            signingCredentials: new SigningCredentials(_jwtTokenOptions.GetSymmetricSecurityKey(),
+            expires: DateTime.UtcNow.Add(_jwtOptions.AccessTokenExpires),
+            signingCredentials: new SigningCredentials(_jwtOptions.GetSymmetricSecurityKey(),
                 SecurityAlgorithms.HmacSha256Signature));
 
-        string jwtToken = new JwtSecurityTokenHandler()
+        string jwt = new JwtSecurityTokenHandler()
             .WriteToken(jwtSecurityToken);
 
         RefreshToken refreshToken = new(Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
             DateTime.UtcNow,
-            _jwtTokenOptions.RefreshTokenExpires);
+            _jwtOptions.RefreshTokenExpires);
 
-        return new JwtToken(jti,
-            jwtToken,
+        return new AccessToken(jti,
+            jwt,
+            _jwtOptions.AccessTokenExpires,
             refreshToken);
     }
 }

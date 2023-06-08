@@ -2,6 +2,8 @@ namespace MarketHub.API.Controllers.Areas.Common;
 
 using Application.Contracts.Common.Account.Requests.BeginRegistration;
 using Application.Contracts.Common.Account.Requests.Login;
+using Application.Contracts.Common.Account.Requests.Logout;
+using Application.Contracts.Common.Account.Requests.RefreshToken;
 using Constants;
 using Infrastructure.API.Controllers;
 using Infrastructure.API.Controllers.Extensions;
@@ -36,4 +38,18 @@ public sealed class AccountController : MarketHubApiController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<IActionResult> Login(LoginRequest request) =>
         this.RequestAsync<LoginRequest, LoginResponse>(request);
+
+    [HttpPost]
+    [Route("refresh-token")]
+    [Authorize]
+    [ProducesResponseType(typeof(RefreshTokenResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> RefreshToken(RefreshTokenRequest request) =>
+        this.RequestAsync<RefreshTokenRequest, RefreshTokenResponse>(request);
+
+    [HttpPost]
+    [Route("logout")]
+    [Authorize]
+    public Task<IActionResult> Logout(LogoutRequest request) =>
+        this.RequestAsync(request);
 }

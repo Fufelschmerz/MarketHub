@@ -3,7 +3,7 @@
 using System.Security.Claims;
 using Data;
 
-public interface IJwtTokenBuilder
+public interface IAccessBuilder
 {
-    JwtToken BuildJwtToken(Claim[] claims);
+    AccessToken BuildAccessToken(Claim[] claims);
 }

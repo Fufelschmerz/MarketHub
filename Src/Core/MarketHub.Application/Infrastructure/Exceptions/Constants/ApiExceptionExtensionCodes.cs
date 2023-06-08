@@ -8,6 +8,7 @@ using global::Infrastructure.Application.Exceptions.Attributes;
 
 public static class ApiExceptionExtensionCodes
 {
+    public const int InvalidToken = 401;
     public const int ObjectNotFound = 404;
     public const int InternalServerError = 500;
 

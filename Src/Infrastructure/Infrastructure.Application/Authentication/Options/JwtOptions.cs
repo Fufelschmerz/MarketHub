@@ -3,7 +3,7 @@
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-public sealed record JwtTokenOptions
+public sealed record JwtOptions
 {
     public string Secret { get; set; }
     

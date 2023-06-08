@@ -37,6 +37,9 @@ public static class ApiExceptionFactory
     public static ApiException WrongCredentials => new(ApiExceptionExtensionCodes.WrongCredentials,
         "Wrong credentials");
     
+    public static ApiException InvalidToken(string tokenType) => new(ApiExceptionExtensionCodes.InvalidToken,
+        $"Invalid token. Type: {tokenType}");
+    
     public static Exception TryMap(Exception exception)
     {
         return ExtensionCodes.TryGetValue(exception.GetType(),

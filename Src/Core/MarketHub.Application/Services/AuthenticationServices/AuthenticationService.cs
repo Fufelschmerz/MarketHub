@@ -1,85 +1,116 @@
 ﻿namespace MarketHub.Application.Services.AuthenticationServices;
 
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
 using System.Security.Claims;
-using global::Infrastructure.Application.Authentication.Constants;
 using global::Infrastructure.Application.Authentication.Data;
-using QueryServices.Users;
-using Domain.Entities.Users;
 using global::Infrastructure.Application.Authentication.Builders;
-using Infrastructure.Identity.Claims.Factories;
+using global::Infrastructure.Application.Authentication.Constants;
+using global::Infrastructure.Cache.Services;
+using Infrastructure.Cache;
+using Infrastructure.Exceptions.Factories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 
 public sealed class AuthenticationService : IAuthenticationService
 {
     private const string RefreshTokenCookieKey = "X-RefreshToken";
 
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IJwtTokenBuilder _jwtTokenBuilder;
-    private readonly IUserQueryService _userQueryService;
+    private readonly IAccessBuilder _accessBuilder;
     private readonly TokenValidationParameters _tokenValidationParameters;
+    private readonly ICacheService<RefreshToken> _refreshTokenCacheService;
+    private readonly ICacheService<AccessToken> _accessTokenCacheService;
 
     public AuthenticationService(IHttpContextAccessor httpContextAccessor,
-        IJwtTokenBuilder jwtTokenBuilder,
-        IUserQueryService userQueryService,
-        IOptions<TokenValidationParameters> tokenValidationParameters)
+        IAccessBuilder accessBuilder,
+        IOptions<TokenValidationParameters> tokenValidationParameters,
+        ICacheService<RefreshToken> refreshTokenCacheService,
+        ICacheService<AccessToken> accessTokenCacheService)
     {
         _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
-        _jwtTokenBuilder = jwtTokenBuilder ?? throw new ArgumentNullException(nameof(jwtTokenBuilder));
-        _userQueryService = userQueryService ?? throw new ArgumentNullException(nameof(userQueryService));
+        _accessBuilder = accessBuilder ?? throw new ArgumentNullException(nameof(accessBuilder));
         _tokenValidationParameters = tokenValidationParameters.Value ?? throw new ArgumentNullException(nameof(tokenValidationParameters.Value));
+        _refreshTokenCacheService = refreshTokenCacheService ?? throw new ArgumentNullException(nameof(refreshTokenCacheService));
+        _accessTokenCacheService = accessTokenCacheService ?? throw new ArgumentNullException(nameof(accessTokenCacheService));
     }
 
-    public Task<User?> GetCurrentUserAsync(CancellationToken cancellationToken = default)
+    public async Task<AccessToken> LoginAsync(Claim[] claims)
     {
-        Claim? sidClaim = _httpContextAccessor.HttpContext?.User
-            .Claims
-            .FirstOrDefault(x => x.Type == ClaimNames.Sid);
+        AccessToken accessToken = _accessBuilder.BuildAccessToken(claims);
 
-        if (sidClaim == null)
-            return Task.FromResult<User?>(null);
+        SetRefreshTokenToCookies(accessToken.RefreshToken);
 
-        if (!long.TryParse(sidClaim.Value,
-                out long id))
-            return Task.FromResult<User?>(null);
+        await _refreshTokenCacheService.AddAsync(Keys.GetRefreshTokenKey(accessToken.Jti),
+            accessToken.RefreshToken,
+            accessToken.RefreshToken.Expires);
 
-        return _userQueryService.FindByIdAsync(id,
-            cancellationToken);
+        await _accessTokenCacheService.AddAsync(Keys.GetAccessTokenKey(accessToken.Jti),
+            accessToken,
+            accessToken.Expires);
+
+        return accessToken;
     }
 
-    public async Task<JwtToken?> LoginAsync(string userEmail,
-        string userPassword,
-        CancellationToken cancellationToken = default)
+    public async Task LogoutAsync()
     {
-        User? user = await _userQueryService.FindByEmailAsync(userEmail,
-            cancellationToken);
+        string? jti = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimNames.Jti)?
+            .Value;
 
-        if (user is null || !user.Password.Check(userPassword))
-            return null;
+        if (string.IsNullOrWhiteSpace(jti))
+            throw new ArgumentNullException(nameof(jti));
 
-        Claim[] claims = ClaimFactory.CreateClaims(user).ToArray();
-
-        JwtToken jwtToken = _jwtTokenBuilder.BuildJwtToken(claims);
-        
-        SetRefreshTokenToCookies(jwtToken.RefreshToken);
-        
-        return jwtToken;
+        await _accessTokenCacheService.DeleteAsync(Keys.GetAccessTokenKey(jti));
+        await _refreshTokenCacheService.DeleteAsync(Keys.GetRefreshTokenKey(jti));
     }
 
-    public Task<JwtToken> RefreshTokenAsync(CancellationToken cancellationToken = default)
+    public async Task<AccessToken> RefreshTokenAsync()
     {
-        //TODO: сдлеать реализацию
-        throw new NotImplementedException();
+        string? authorization = _httpContextAccessor.HttpContext?.Request.Headers[HeaderNames.Authorization];
+
+        if (!AuthenticationHeaderValue.TryParse(authorization, out AuthenticationHeaderValue? authenticationHeaderValue))
+            throw new ArgumentException("Invalid authorization header", nameof(authorization));
+
+        if (authenticationHeaderValue is null)
+            throw new ArgumentNullException(nameof(authenticationHeaderValue));
+
+        if (string.IsNullOrWhiteSpace(authenticationHeaderValue.Parameter))
+            throw ApiExceptionFactory.InvalidToken(nameof(AccessToken.Jwt));
+
+        string? refreshTokenValue = _httpContextAccessor.HttpContext?.Request.Cookies[RefreshTokenCookieKey];
+
+        if (string.IsNullOrWhiteSpace(refreshTokenValue))
+            throw ApiExceptionFactory.InvalidToken(nameof(RefreshToken));
+
+        (ClaimsPrincipal claimsPrincipal, JwtSecurityToken jwtSecurityToken) decodedJwt = DecodeJwt(authenticationHeaderValue.Parameter);
+
+        if (!decodedJwt.jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256Signature))
+            throw ApiExceptionFactory.InvalidToken(nameof(AccessToken.Jwt));
+
+        Claim[] claims = decodedJwt.claimsPrincipal.Claims.ToArray();
+
+        string? jti = claims.FirstOrDefault(x => x.Type == ClaimNames.Jti)?.Value;
+
+        if (string.IsNullOrWhiteSpace(jti))
+            throw new ArgumentNullException(nameof(jti));
+
+        RefreshToken? refreshToken = await _refreshTokenCacheService
+            .GetAsync(Keys.GetRefreshTokenKey(jti));
+
+        if (refreshToken is null || !refreshToken.IsExpired())
+            throw ApiExceptionFactory.InvalidToken(nameof(RefreshToken));
+
+        return await LoginAsync(claims);
     }
-    
-    private (ClaimsPrincipal claimsPrincipal, JwtSecurityToken jwtSecurityToken) DecodeJwtToken(string jwtToken)
+
+    private (ClaimsPrincipal claimsPrincipal, JwtSecurityToken jwtSecurityToken) DecodeJwt(string jwt)
     {
-        ClaimsPrincipal claimsPrincipal = new JwtSecurityTokenHandler()
-            .ValidateToken(jwtToken, _tokenValidationParameters,
-                out SecurityToken validatedToken);
-        
+        ClaimsPrincipal claimsPrincipal = new JwtSecurityTokenHandler().ValidateToken(jwt,
+            _tokenValidationParameters,
+            out SecurityToken validatedToken);
+
         return (claimsPrincipal, validatedToken as JwtSecurityToken)!;
     }
 

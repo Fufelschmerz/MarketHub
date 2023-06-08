@@ -12,10 +12,8 @@ using Services.QueryServices.Roles;
 public sealed class BeginRegistrationRequestHandler : IRequestHandler<BeginRegistrationRequest>
 {
     private readonly IRoleQueryService _roleQueryService;
-
     private readonly IUserService _userService;
     private readonly IAccountService _accountService;
-
     private readonly IMediator _mediator;
 
     public BeginRegistrationRequestHandler(IRoleQueryService roleQueryService,

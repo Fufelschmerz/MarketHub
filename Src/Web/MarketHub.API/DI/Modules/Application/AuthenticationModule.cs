@@ -10,12 +10,12 @@ internal sealed class AuthenticationModule : ConfiguredModule
 {
     protected override void Load(ContainerBuilder builder)
     {
-        JwtTokenOptions jwtTokenOptions = Configuration.GetSection("Jwt:Authentication:Parameters")
-            .Get<JwtTokenOptions>()!;
+        JwtOptions jwtOptions = Configuration.GetSection("Jwt:Authentication:Parameters")
+            .Get<JwtOptions>()!;
 
-        builder.RegisterType<JwtTokenBuilder>()
+        builder.RegisterType<AccessBuilder>()
             .AsImplementedInterfaces()
-            .WithParameter("jwtTokenOptions", jwtTokenOptions)
+            .WithParameter("jwtOptions", jwtOptions)
             .InstancePerDependency();
 
         builder.RegisterType<AuthenticationService>()
