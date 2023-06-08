@@ -12,11 +12,12 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Infrastructure\Infrastructure.Application\Infrastructure.Application.csproj" />
+      <ProjectReference Include="..\..\Infrastructure\Infrastructure.Cache\Infrastructure.Cache.csproj" />
       <ProjectReference Include="..\MarketHub.Domain\MarketHub.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Services" />
+      <Folder Include="Services\UserProvider" />
     </ItemGroup>
 
 </Project>
