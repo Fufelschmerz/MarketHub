@@ -2,32 +2,23 @@
 
 using Confirmations;
 using Entities.Accounts;
-using Entities.Accounts.Confirmations;
-using Events.Account.Confirmations;
 using Exceptions.Accounts;
-using Exceptions.Accounts.Confirmations;
 using Repositories.Accounts;
-using Repositories.Accounts.Confirmations;
 using Specifications.Accounts;
-using Specifications.Accounts.Confirmations;
 
 public sealed class AccountService : IAccountService
 {
     private readonly IAccountRepository _accountRepository;
-    private readonly IEmailConfirmationRepository _emailConfirmationRepository;
-
-    private readonly IConfirmationTokenGenerator _confirmationTokenGenerator;
+    private readonly IEmailConfirmationService _emailConfirmationService;
 
     public AccountService(IAccountRepository accountRepository,
-        IEmailConfirmationRepository emailConfirmationRepository,
-        IConfirmationTokenGenerator confirmationTokenGenerator)
+        IEmailConfirmationService emailConfirmationService)
     {
         _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
-        _emailConfirmationRepository = emailConfirmationRepository ?? throw new ArgumentNullException(nameof(emailConfirmationRepository));
-        _confirmationTokenGenerator = confirmationTokenGenerator ?? throw new ArgumentNullException(nameof(confirmationTokenGenerator));
+        _emailConfirmationService = emailConfirmationService ?? throw new ArgumentNullException(nameof(emailConfirmationService));
     }
 
-    public async Task BeginRegistrationAsync(Account account,
+    public async Task RegistrationAsync(Account account,
         CancellationToken cancellationToken = default)
     {
         await CheckIsAccountWithUserExistsAsync(account,
@@ -36,34 +27,10 @@ public sealed class AccountService : IAccountService
         await _accountRepository.AddAsync(account,
             cancellationToken);
 
-        string emailConfirmationToken = _confirmationTokenGenerator.Create();
-
-        EmailConfirmation emailConfirmation = new(account.User.Email,
-            emailConfirmationToken);
-
-        await _emailConfirmationRepository.AddAsync(emailConfirmation,
-            cancellationToken);
-
-        account.RaiseDomainEvent(new EmailConfirmationRequiredEvent(emailConfirmation));
-    }
-
-    public async Task CompleteRegistrationAsync(Account account,
-        string emailConfirmationToken,
-        CancellationToken cancellationToken = default)
-    {
-        EmailConfirmationByTokenSpecification emailConfirmationByTokenSpec = new(emailConfirmationToken);
-
-        EmailConfirmation emailConfirmation = await _emailConfirmationRepository.SingleOrDefaultAsync(
-            emailConfirmationByTokenSpec,
-            cancellationToken) ?? throw new InvalidConfirmationTokenException("Invalid email confirmation token");
-
-        account.Confirm();
-
-        await _emailConfirmationRepository.DeleteAsync(emailConfirmation,
+        await _emailConfirmationService.CreateAsync(account,
             cancellationToken);
     }
-
-
+    
     private async Task CheckIsAccountWithUserExistsAsync(Account account,
         CancellationToken cancellationToken = default)
     {

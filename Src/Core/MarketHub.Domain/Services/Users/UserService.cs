@@ -8,8 +8,7 @@ using MarketHub.Domain.Repositories.Users;
 using Specifications;
 using MarketHub.Domain.Specifications.Users;
 
-public sealed class UserService : UniqueNameService<User>,
-    IUserService
+public sealed class UserService : UniqueNameService<User>, IUserService
 {
     private readonly IUserRepository _userRepository;
 

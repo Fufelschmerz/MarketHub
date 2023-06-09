@@ -7,9 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Infrastructure\Infrastructure.Domain\Infrastructure.Domain.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\Infrastructure.Persistence\Infrastructure.Persistence.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\Infrastructure.Specifications\Infrastructure.Specifications.csproj"/>
+        <ProjectReference Include="..\..\Infrastructure\Infrastructure.Domain\Infrastructure.Domain.csproj" />
+        <ProjectReference Include="..\..\Infrastructure\Infrastructure.Persistence\Infrastructure.Persistence.csproj" />
+        <ProjectReference Include="..\..\Infrastructure\Infrastructure.Specifications\Infrastructure.Specifications.csproj" />
     </ItemGroup>
     
 </Project>

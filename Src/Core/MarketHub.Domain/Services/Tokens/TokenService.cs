@@ -1,8 +1,8 @@
-﻿namespace MarketHub.Domain.Services.Accounts.Confirmations;
+﻿namespace MarketHub.Domain.Services.Tokens;
 
 using System.Web;
 
-public sealed class ConfirmationTokenGenerator : IConfirmationTokenGenerator
+public sealed class TokenService : ITokenService
 {
     public string Create()
     {

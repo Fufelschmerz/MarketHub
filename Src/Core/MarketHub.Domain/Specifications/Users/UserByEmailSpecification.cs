@@ -7,6 +7,7 @@ public class UserByEmailSpecification : Specification<User>
 {
     public UserByEmailSpecification(string name)
     {
-        Query.Where(x => x.Name == name);
+        Query.Where(x => x.Name == name)
+            .Include(x => x.Account);
     }
 }

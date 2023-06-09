@@ -1,14 +1,14 @@
-﻿namespace MarketHub.Domain.Entities.Accounts.Confirmations;
+namespace MarketHub.Domain.Entities.Accounts.Recoveries;
 
 using Infrastructure.Domain.Entities;
 
-public sealed class EmailConfirmation : Entity
+public sealed class PasswordRecovery : Entity
 {
-    private EmailConfirmation()
+    private PasswordRecovery()
     {
     }
 
-    public EmailConfirmation(Account account,
+    public PasswordRecovery(Account account,
         string token)
     {
         if (string.IsNullOrWhiteSpace(token))
@@ -20,9 +20,9 @@ public sealed class EmailConfirmation : Entity
     }
 
     public DateTime CreatedAtUtc { get; private set; }
-    
+
     public long AccountId { get; private set; }
-    
+
     public Account Account { get; private set; }
 
     public string Token { get; private set; }

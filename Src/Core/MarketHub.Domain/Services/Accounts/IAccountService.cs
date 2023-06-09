@@ -5,10 +5,6 @@ using Infrastructure.Domain.Services;
 
 public interface IAccountService : IDomainService
 {
-    Task BeginRegistrationAsync(Account account,
-        CancellationToken cancellationToken = default);
-
-    Task CompleteRegistrationAsync(Account account,
-        string emailConfirmationToken,
+    Task RegistrationAsync(Account account,
         CancellationToken cancellationToken = default);
 }
