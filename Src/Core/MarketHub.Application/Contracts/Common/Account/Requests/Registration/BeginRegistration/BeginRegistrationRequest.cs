@@ -1,4 +1,4 @@
-namespace MarketHub.Application.Contracts.Common.Account.Requests.BeginRegistration;
+namespace MarketHub.Application.Contracts.Common.Account.Requests.Registration.BeginRegistration;
 
 using Domain.Entities.Users.Roles.Enums;
 using MediatR;

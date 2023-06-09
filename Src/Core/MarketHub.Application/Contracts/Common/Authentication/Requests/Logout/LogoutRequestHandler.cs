@@ -1,7 +1,7 @@
-namespace MarketHub.Application.Contracts.Common.Account.Requests.Logout;
+namespace MarketHub.Application.Contracts.Common.Authentication.Requests.Logout;
 
+using MarketHub.Application.Services.AuthenticationServices;
 using MediatR;
-using Services.AuthenticationServices;
 
 public sealed class LogoutRequestHandler : IRequestHandler<LogoutRequest>
 {

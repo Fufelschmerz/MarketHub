@@ -1,8 +1,8 @@
-namespace MarketHub.Application.Contracts.Common.Account.Requests.RefreshToken;
+namespace MarketHub.Application.Contracts.Common.Authentication.Requests.RefreshToken;
 
 using global::Infrastructure.Application.Authentication.Data;
+using MarketHub.Application.Services.AuthenticationServices;
 using MediatR;
-using Services.AuthenticationServices;
 
 public sealed class RefreshTokenRequestHandler : IRequestHandler<RefreshTokenRequest, RefreshTokenResponse>
 {

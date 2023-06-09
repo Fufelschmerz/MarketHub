@@ -1,4 +1,4 @@
-namespace MarketHub.Application.Contracts.Common.Account.Requests.RefreshToken;
+namespace MarketHub.Application.Contracts.Common.Authentication.Requests.RefreshToken;
 
 using MediatR;
 

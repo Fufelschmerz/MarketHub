@@ -1,13 +1,13 @@
-﻿namespace MarketHub.Application.Contracts.Common.Account.Requests.Login;
+﻿namespace MarketHub.Application.Contracts.Common.Authentication.Requests.Login;
 
 using System.Security.Claims;
-using Domain.Entities.Users;
 using global::Infrastructure.Application.Authentication.Data;
-using Infrastructure.Exceptions.Factories;
-using Infrastructure.Identity.Claims.Factories;
-using Services.AuthenticationServices;
+using MarketHub.Application.Infrastructure.Exceptions.Factories;
+using MarketHub.Application.Infrastructure.Identity.Claims.Factories;
+using MarketHub.Application.Services.AuthenticationServices;
+using MarketHub.Application.Services.QueryServices.Users;
+using MarketHub.Domain.Entities.Users;
 using MediatR;
-using Services.QueryServices.Users;
 
 public sealed class LoginRequestHandler : IRequestHandler<LoginRequest, LoginResponse>
 {

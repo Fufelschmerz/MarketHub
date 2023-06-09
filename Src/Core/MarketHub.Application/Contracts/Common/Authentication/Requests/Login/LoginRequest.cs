@@ -1,4 +1,4 @@
-﻿namespace MarketHub.Application.Contracts.Common.Account.Requests.Login;
+﻿namespace MarketHub.Application.Contracts.Common.Authentication.Requests.Login;
 
 using MediatR;
 

@@ -1,13 +1,13 @@
-﻿namespace MarketHub.Application.Contracts.Common.Account.Requests.BeginRegistration;
+﻿namespace MarketHub.Application.Contracts.Common.Account.Requests.Registration.BeginRegistration;
 
+using global::Infrastructure.Domain.Events;
+using Services.QueryServices.Roles;
 using Domain.Entities.Accounts;
 using Domain.Entities.Users;
 using Domain.Entities.Users.Roles;
-using Domain.Services.Accounts;
-using Domain.Services.Users;
-using global::Infrastructure.Domain.Events;
+using MarketHub.Domain.Services.Accounts;
+using MarketHub.Domain.Services.Users;
 using MediatR;
-using Services.QueryServices.Roles;
 
 public sealed class BeginRegistrationRequestHandler : IRequestHandler<BeginRegistrationRequest>
 {
@@ -43,7 +43,7 @@ public sealed class BeginRegistrationRequestHandler : IRequestHandler<BeginRegis
 
         Account account = new(user);
 
-        await _accountService.BeginRegistrationAsync(account,
+        await _accountService.RegistrationAsync(account,
             cancellationToken);
 
         foreach (IDomainEvent domainEvent in account.DomainEvents)
