@@ -3,6 +3,7 @@
 using Domain.Exceptions;
 using Domain.Exceptions.Accounts;
 using Domain.Exceptions.Accounts.Confirmations;
+using Domain.Exceptions.Tokens;
 using Domain.Exceptions.Users;
 using global::Infrastructure.Application.Exceptions.Attributes;
 
@@ -18,11 +19,11 @@ public static class ApiExceptionExtensionCodes
     [MapDomainException(typeof(UserWithSameEmailAlreadyExistsException))]
     public const int UserWithSameEmailAlreadyExists = 1002;
 
-    [MapDomainException(typeof(InvalidConfirmationTokenException))]
-    public const int InvalidConfirmationToken = 1003;
+    [MapDomainException(typeof(InvalidTokenException))]
+    public const int InvalidTokenException = 1003;
 
-    [MapDomainException(typeof(AccountAlreadyConfirmedException))]
-    public const int AccountAlreadyConfirmed = 1004;
+    [MapDomainException(typeof(EmailAlreadyConfirmedException))]
+    public const int EmailAlreadyConfirmedException = 1004;
 
     [MapDomainException(typeof(AccountWithSameUserAlreadyExistsException))]
     public const int AccountWithSameUserAlreadyExists = 1005;
