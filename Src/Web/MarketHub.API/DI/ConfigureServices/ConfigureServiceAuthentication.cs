@@ -40,7 +40,7 @@ internal static class ConfigureServiceAuthentication
 
                     await context.Response.WriteAsync(JsonSerializer.Serialize(new ProblemDetails
                     {
-                        Title = "Authentication error",
+                        Title = "API error",
                         Detail = context.AuthenticateFailure?.Message,
                         Status = statusCode
                     }));
@@ -49,17 +49,18 @@ internal static class ConfigureServiceAuthentication
                 OnTokenValidated = async context =>
                 {
                     string? jti = context.Principal?.Claims.FirstOrDefault(x => x.Type == ClaimNames.Jti)?.Value;
-
+                    string? sid = context.Principal?.Claims.FirstOrDefault(x => x.Type == ClaimNames.Sid)?.Value;
+                    
                     if (string.IsNullOrWhiteSpace(jti))
-                    {
-                        context.Fail("Empty jti claim");
-                        return;
-                    }
-
+                        context.Fail(ApiExceptionFactory.InvalidClaim(nameof(ClaimNames.Jti)));
+                    
+                    if(string.IsNullOrWhiteSpace(sid) ||  !long.TryParse(sid, out long _))
+                        context.Fail(ApiExceptionFactory.InvalidClaim(nameof(ClaimNames.Sid)));
+                    
                     ICacheService<AccessToken> accessTokenCacheService = context.HttpContext.RequestServices
                         .GetRequiredService<ICacheService<AccessToken>>();
 
-                    AccessToken? accessToken = await accessTokenCacheService.GetAsync(Keys.GetAccessTokenKey(jti));
+                    AccessToken? accessToken = await accessTokenCacheService.GetAsync(Keys.GetAccessTokenKey(jti!));
 
                     if (accessToken is null)
                         context.Fail(ApiExceptionFactory.InvalidToken(nameof(AccessToken.Jwt)));

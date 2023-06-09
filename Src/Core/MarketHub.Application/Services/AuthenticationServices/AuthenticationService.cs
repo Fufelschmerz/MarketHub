@@ -56,11 +56,7 @@ public sealed class AuthenticationService : IAuthenticationService
 
     public async Task LogoutAsync()
     {
-        string? jti = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimNames.Jti)?
-            .Value;
-
-        if (string.IsNullOrWhiteSpace(jti))
-            throw new ArgumentNullException(nameof(jti));
+        string jti = _httpContextAccessor.HttpContext?.User.Claims.First(x => x.Type == ClaimNames.Jti).Value!;
 
         await _accessTokenCacheService.DeleteAsync(Keys.GetAccessTokenKey(jti));
         await _refreshTokenCacheService.DeleteAsync(Keys.GetRefreshTokenKey(jti));
@@ -69,35 +65,29 @@ public sealed class AuthenticationService : IAuthenticationService
     public async Task<AccessToken> RefreshTokenAsync()
     {
         string? authorization = _httpContextAccessor.HttpContext?.Request.Headers[HeaderNames.Authorization];
-
+        
         if (!AuthenticationHeaderValue.TryParse(authorization, out AuthenticationHeaderValue? authenticationHeaderValue))
             throw new ArgumentException("Invalid authorization header", nameof(authorization));
 
         if (authenticationHeaderValue is null)
             throw new ArgumentNullException(nameof(authenticationHeaderValue));
-
-        if (string.IsNullOrWhiteSpace(authenticationHeaderValue.Parameter))
-            throw ApiExceptionFactory.InvalidToken(nameof(AccessToken.Jwt));
-
+        
         string? refreshTokenValue = _httpContextAccessor.HttpContext?.Request.Cookies[RefreshTokenCookieKey];
 
         if (string.IsNullOrWhiteSpace(refreshTokenValue))
             throw ApiExceptionFactory.InvalidToken(nameof(RefreshToken));
 
-        (ClaimsPrincipal claimsPrincipal, JwtSecurityToken jwtSecurityToken) decodedJwt = DecodeJwt(authenticationHeaderValue.Parameter);
+        (ClaimsPrincipal claimsPrincipal, JwtSecurityToken jwtSecurityToken) decodedJwt = 
+            DecodeJwt(authenticationHeaderValue.Parameter!);
 
         if (!decodedJwt.jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256Signature))
             throw ApiExceptionFactory.InvalidToken(nameof(AccessToken.Jwt));
 
         Claim[] claims = decodedJwt.claimsPrincipal.Claims.ToArray();
 
-        string? jti = claims.FirstOrDefault(x => x.Type == ClaimNames.Jti)?.Value;
+        string jti = claims.First(x => x.Type == ClaimNames.Jti).Value;
 
-        if (string.IsNullOrWhiteSpace(jti))
-            throw new ArgumentNullException(nameof(jti));
-
-        RefreshToken? refreshToken = await _refreshTokenCacheService
-            .GetAsync(Keys.GetRefreshTokenKey(jti));
+        RefreshToken? refreshToken = await _refreshTokenCacheService.GetAsync(Keys.GetRefreshTokenKey(jti));
 
         if (refreshToken is null || !refreshToken.IsExpired())
             throw ApiExceptionFactory.InvalidToken(nameof(RefreshToken));

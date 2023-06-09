@@ -31,13 +31,16 @@ public static class ApiExceptionFactory
         }
     }
 
-    public static ApiException ObjectNotFound => new(ApiExceptionExtensionCodes.ObjectNotFound,
-        "Object not found");
-
     public static ApiException WrongCredentials => new(ApiExceptionExtensionCodes.WrongCredentials,
         "Wrong credentials");
     
-    public static ApiException InvalidToken(string tokenType) => new(ApiExceptionExtensionCodes.InvalidToken,
+    public static ApiException ObjectNotFound(string objectName) => new(ApiExceptionExtensionCodes.ObjectNotFound,
+        $"Object not found: Name: {objectName}");
+
+    public static ApiException InvalidClaim(string claimType) => new(ApiExceptionExtensionCodes.Unauthorized,
+        $"Invalid claim. Type: {claimType}");
+    
+    public static ApiException InvalidToken(string tokenType) => new(ApiExceptionExtensionCodes.Unauthorized,
         $"Invalid token. Type: {tokenType}");
     
     public static Exception TryMap(Exception exception)

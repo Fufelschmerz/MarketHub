@@ -4,5 +4,5 @@ using Domain.Entities.Users;
 
 public interface IAuthorizationService
 {
-    Task<User?> GetCurrentUserAsync(CancellationToken cancellationToken = default);
+    Task<User> GetCurrentUserAsync(CancellationToken cancellationToken = default);
 }

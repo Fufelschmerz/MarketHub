@@ -35,7 +35,7 @@ public abstract class MarketHubApiController : ApiController
 
                 ProblemDetails problemDetails = new()
                 {
-                    Title = "Api error",
+                    Title = "API error",
                     Detail = apiException.Message,
                     Status = statusCode
                 };
@@ -77,7 +77,7 @@ public abstract class MarketHubApiController : ApiController
     private static int GetStatusCode(ApiException exception) =>
         exception.ExtensionCode switch
         {
-            ApiExceptionExtensionCodes.InvalidToken => StatusCodes.Status401Unauthorized,
+            ApiExceptionExtensionCodes.Unauthorized => StatusCodes.Status401Unauthorized,
             ApiExceptionExtensionCodes.ObjectNotFound => StatusCodes.Status404NotFound,
             _ => StatusCodes.Status400BadRequest
         };

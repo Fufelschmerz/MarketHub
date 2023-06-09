@@ -1,6 +1,5 @@
 namespace MarketHub.Application.Services.AuthorizationServices;
 
-using System.Security.Claims;
 using Domain.Entities.Users;
 using global::Infrastructure.Application.Authentication.Constants;
 using Microsoft.AspNetCore.Http;
@@ -17,17 +16,16 @@ public sealed class AuthorizationService : IAuthorizationService
         _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         _userQueryService = userQueryService ?? throw new ArgumentNullException(nameof(userQueryService));
     }
-    
-    public Task<User?> GetCurrentUserAsync(CancellationToken cancellationToken = default)
-    {
-        Claim? sidClaim = _httpContextAccessor.HttpContext?.User
-            .Claims
-            .FirstOrDefault(x => x.Type == ClaimNames.Sid);
-        
-        if (!long.TryParse(sidClaim?.Value, out long id))
-            return Task.FromResult<User?>(null);
 
-        return _userQueryService.FindByIdAsync(id,
-            cancellationToken);
+    public async Task<User> GetCurrentUserAsync(CancellationToken cancellationToken = default)
+    {
+        string sidClaim = _httpContextAccessor.HttpContext?.User.Claims.First(x => x.Type == ClaimNames.Sid).Value!;
+
+        long userId = long.Parse(sidClaim);
+
+        User user = await _userQueryService.FindByIdAsync(userId,
+            cancellationToken) ?? throw new ArgumentNullException(nameof(user));
+
+        return user;
     }
 }
