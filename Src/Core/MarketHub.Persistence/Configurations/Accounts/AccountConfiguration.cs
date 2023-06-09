@@ -16,7 +16,7 @@ internal sealed class AccountConfiguration : IEntityTypeConfiguration<Account>
             .IsRequired()
             .HasColumnType("decimal(18,2)");
 
-        builder.Property(x => x.IsConfirmed)
+        builder.Property(x => x.IsEmailConfirmed)
             .IsRequired()
             .HasDefaultValue(false);
     }

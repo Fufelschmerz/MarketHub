@@ -26,13 +26,14 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasOne(x => x.Account)
             .WithOne(x => x.User)
-            .HasForeignKey<Account>(x => x.UserId);
+            .HasForeignKey<Account>(x => x.UserId)
+            .IsRequired();
 
         builder.HasMany(x => x.Roles)
             .WithMany(x => x.Users)
             .UsingEntity<Dictionary<string, object>>(
                 "UsersToRoles",
-                x => x.HasOne<Role>().WithMany().HasForeignKey("RoleId "),
+                x => x.HasOne<Role>().WithMany().HasForeignKey("RoleId"),
                 x => x.HasOne<User>().WithMany().HasForeignKey("UserId"));
     }
 }

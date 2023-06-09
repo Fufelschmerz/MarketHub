@@ -6,8 +6,7 @@ using MarketHub.Domain.Repositories.Users.Roles;
 using Persistence;
 using Repositories;
 
-public sealed class RoleRepository : Repository<Role>,
-    IRoleRepository
+public sealed class RoleRepository : Repository<Role>, IRoleRepository
 {
     public RoleRepository(DataContext dataContext,
         ISpecificationEvaluator specificationEvaluator)

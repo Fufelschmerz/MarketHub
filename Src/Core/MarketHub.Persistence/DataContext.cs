@@ -2,6 +2,7 @@
 
 using Domain.Entities.Accounts;
 using Domain.Entities.Accounts.Confirmations;
+using Domain.Entities.Accounts.Recoveries;
 using Domain.Entities.Users;
 using Domain.Entities.Users.Roles;
 using Extensions.Init.Roles;
@@ -19,6 +20,8 @@ public sealed class DataContext : DbContext
     public DbSet<Role> Roles => Set<Role>();
 
     public DbSet<Account> Accounts => Set<Account>();
+
+    public DbSet<PasswordRecovery> PasswordRecoveries => Set<PasswordRecovery>();
 
     public DbSet<EmailConfirmation> EmailConfirmations => Set<EmailConfirmation>();
 

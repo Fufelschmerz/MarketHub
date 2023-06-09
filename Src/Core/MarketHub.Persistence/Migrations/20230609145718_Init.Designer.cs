@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MarketHub.Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230607065620_Init")]
+    [Migration("20230609145718_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -36,7 +36,7 @@ namespace MarketHub.Persistence.Migrations
                     b.Property<decimal>("Balance")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<bool>("IsConfirmed")
+                    b.Property<bool>("IsEmailConfirmed")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
@@ -60,16 +60,11 @@ namespace MarketHub.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime?>("CompletedAtUtc")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<long>("AccountId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Token")
                         .IsRequired()
@@ -78,7 +73,37 @@ namespace MarketHub.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AccountId")
+                        .IsUnique();
+
                     b.ToTable("EmailConfirmations", (string)null);
+                });
+
+            modelBuilder.Entity("MarketHub.Domain.Entities.Accounts.Recoveries.PasswordRecovery", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("AccountId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId")
+                        .IsUnique();
+
+                    b.ToTable("PasswordRecoveries", (string)null);
                 });
 
             modelBuilder.Entity("MarketHub.Domain.Entities.Users.Roles.Role", b =>
@@ -147,13 +172,13 @@ namespace MarketHub.Persistence.Migrations
 
             modelBuilder.Entity("UsersToRoles", b =>
                 {
-                    b.Property<long>("RoleId ")
+                    b.Property<long>("RoleId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("RoleId ", "UserId");
+                    b.HasKey("RoleId", "UserId");
 
                     b.HasIndex("UserId");
 
@@ -169,6 +194,28 @@ namespace MarketHub.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MarketHub.Domain.Entities.Accounts.Confirmations.EmailConfirmation", b =>
+                {
+                    b.HasOne("MarketHub.Domain.Entities.Accounts.Account", "Account")
+                        .WithOne()
+                        .HasForeignKey("MarketHub.Domain.Entities.Accounts.Confirmations.EmailConfirmation", "AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
+            modelBuilder.Entity("MarketHub.Domain.Entities.Accounts.Recoveries.PasswordRecovery", b =>
+                {
+                    b.HasOne("MarketHub.Domain.Entities.Accounts.Account", "Account")
+                        .WithOne()
+                        .HasForeignKey("MarketHub.Domain.Entities.Accounts.Recoveries.PasswordRecovery", "AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("MarketHub.Domain.Entities.Users.User", b =>
@@ -202,7 +249,7 @@ namespace MarketHub.Persistence.Migrations
                 {
                     b.HasOne("MarketHub.Domain.Entities.Users.Roles.Role", null)
                         .WithMany()
-                        .HasForeignKey("RoleId ")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

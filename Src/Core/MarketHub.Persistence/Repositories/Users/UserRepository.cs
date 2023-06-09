@@ -6,8 +6,7 @@ using MarketHub.Domain.Repositories.Users;
 using Repositories;
 using Microsoft.EntityFrameworkCore;
 
-public sealed class UserRepository : Repository<User>,
-    IUserRepository
+public sealed class UserRepository : Repository<User>, IUserRepository
 {
     public UserRepository(DataContext dataContext,
         ISpecificationEvaluator specificationEvaluator)
