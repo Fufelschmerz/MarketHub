@@ -1,9 +1,9 @@
 namespace MarketHub.API.Controllers.Areas.Common;
 
-using Application.Contracts.Common.Account.Requests.BeginRegistration;
-using Application.Contracts.Common.Account.Requests.Login;
-using Application.Contracts.Common.Account.Requests.Logout;
-using Application.Contracts.Common.Account.Requests.RefreshToken;
+using Application.Contracts.Common.Account.Requests.PasswordRecovery.BeginPasswordRecovery;
+using Application.Contracts.Common.Account.Requests.PasswordRecovery.CompletePasswordRecovery;
+using Application.Contracts.Common.Account.Requests.Registration.BeginRegistration;
+using Application.Contracts.Common.Account.Requests.Registration.CompleteRegistration;
 using Constants;
 using Infrastructure.API.Controllers;
 using Infrastructure.API.Controllers.Extensions;
@@ -31,25 +31,22 @@ public sealed class AccountController : MarketHubApiController
     public Task<IActionResult> BeginRegistration(BeginRegistrationRequest request) =>
         this.RequestAsync(request);
 
+
     [HttpPost]
-    [Route("login")]
+    [Route("complete-registration")]
+    [Authorize]
+    public Task<IActionResult> CompleteRegistration(CompleteRegistrationRequest request) =>
+        this.RequestAsync(request);
+
+    [HttpPost]
+    [Route("begin-password-recovery")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> Login(LoginRequest request) =>
-        this.RequestAsync<LoginRequest, LoginResponse>(request);
+    public Task<IActionResult> BeginPasswordRecovery(BeginPasswordRecoveryRequest request) =>
+        this.RequestAsync(request);
 
     [HttpPost]
-    [Route("refresh-token")]
-    [Authorize]
-    [ProducesResponseType(typeof(RefreshTokenResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> RefreshToken(RefreshTokenRequest request) =>
-        this.RequestAsync<RefreshTokenRequest, RefreshTokenResponse>(request);
-
-    [HttpPost]
-    [Route("logout")]
-    [Authorize]
-    public Task<IActionResult> Logout(LogoutRequest request) =>
+    [Route("complete-password-recovery")]
+    [AllowAnonymous]
+    public Task<IActionResult> CompletePasswordRecovery(CompletePasswordRecoveryRequest request) =>
         this.RequestAsync(request);
 }
