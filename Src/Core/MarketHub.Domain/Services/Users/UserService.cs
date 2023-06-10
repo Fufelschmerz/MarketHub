@@ -38,7 +38,7 @@ public sealed class UserService : UniqueNameService<User>, IUserService
         User? existingUser = await _userRepository.SingleOrDefaultAsync(userByEmailSpec,
             cancellationToken);
 
-        if (existingUser != null)
+        if (existingUser is not null)
             throw new UserWithSameEmailAlreadyExistsException($"User with email {newEmail} already exists");
     }
 

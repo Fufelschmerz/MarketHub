@@ -13,7 +13,7 @@ internal static class UniqueNameServiceExtensions
             newName,
             cancellationToken);
 
-        if (existingObject != null)
+        if (existingObject is not null)
             throw new ObjectWithSameNameAlreadyExistsException(
                 $"{typeof(T).Name} with name {newName} already exists");
     }

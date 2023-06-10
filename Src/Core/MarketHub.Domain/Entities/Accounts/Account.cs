@@ -25,20 +25,21 @@ public sealed class Account : Entity
     public decimal Balance { get; private set; }
 
     public bool IsEmailConfirmed { get; private set; }
-
-    protected internal void SetBalance(decimal balance)
-    {
-        if (balance < 0m)
-            throw new ArgumentOutOfRangeException(nameof(balance));
-
-        Balance = balance;
-    }
     
-    protected internal void ConfirmEmail()
+    
+    public  void ConfirmEmail()
     {
         if (IsEmailConfirmed)
             throw new EmailAlreadyConfirmedException("Email is already confirmed");
 
         IsEmailConfirmed = true;
+    }
+    
+    public  void SetBalance(decimal balance)
+    {
+        if (balance < 0m)
+            throw new ArgumentOutOfRangeException(nameof(balance));
+
+        Balance = balance;
     }
 }

@@ -1,13 +1,13 @@
 ﻿namespace MarketHub.Application.Contracts.Common.Account.Requests.Registration.BeginRegistration;
 
 using global::Infrastructure.Domain.Events;
-using Services.QueryServices.Roles;
 using Domain.Entities.Accounts;
 using Domain.Entities.Users;
 using Domain.Entities.Users.Roles;
 using MarketHub.Domain.Services.Accounts;
 using MarketHub.Domain.Services.Users;
 using MediatR;
+using Services.QueryServices.Users.Roles;
 
 public sealed class BeginRegistrationRequestHandler : IRequestHandler<BeginRegistrationRequest>
 {

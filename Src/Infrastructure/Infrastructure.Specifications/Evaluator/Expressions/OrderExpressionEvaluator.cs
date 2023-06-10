@@ -39,7 +39,7 @@ public sealed class OrderExpressionEvaluator : IExpressionEvaluator
                     break;
             }
 
-        if (orderedQuery != null)
+        if (orderedQuery is not null)
             query = orderedQuery;
 
         return query;

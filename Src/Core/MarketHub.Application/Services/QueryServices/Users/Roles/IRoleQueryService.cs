@@ -1,8 +1,8 @@
-﻿namespace MarketHub.Application.Services.QueryServices.Roles;
+﻿namespace MarketHub.Application.Services.QueryServices.Users.Roles;
 
-using Domain.Entities.Users.Roles;
-using Domain.Entities.Users.Roles.Enums;
 using global::Infrastructure.Application.Services;
+using MarketHub.Domain.Entities.Users.Roles;
+using MarketHub.Domain.Entities.Users.Roles.Enums;
 
 public interface IRoleQueryService : IQueryService<Role>
 {

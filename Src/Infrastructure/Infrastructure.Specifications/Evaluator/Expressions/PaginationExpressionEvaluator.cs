@@ -10,10 +10,10 @@ public sealed class PaginationExpressionEvaluator : IExpressionEvaluator
         ISpecification<T> specification)
         where T : class
     {
-        if (specification.Skip != null && specification.Skip != 0)
+        if (specification.Skip is not null && specification.Skip is not 0)
             query = query.Skip(specification.Skip.Value);
 
-        if (specification.Take != null)
+        if (specification.Take is not null)
             query = query.Take(specification.Take.Value);
 
         return query;

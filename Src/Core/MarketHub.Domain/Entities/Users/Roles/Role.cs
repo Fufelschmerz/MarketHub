@@ -5,8 +5,7 @@ using Infrastructure.Domain.Entities;
 using Abstractions;
 using Users;
 
-public sealed class Role : Entity,
-    IHasName
+public sealed class Role : Entity, IHasName
 {
     private readonly List<User> _users = new();
 

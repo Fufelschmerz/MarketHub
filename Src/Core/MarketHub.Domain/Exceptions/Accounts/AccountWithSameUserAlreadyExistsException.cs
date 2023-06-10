@@ -1,6 +1,6 @@
 ﻿namespace MarketHub.Domain.Exceptions.Accounts;
 
-public class AccountWithSameUserAlreadyExistsException : Exception
+public sealed class AccountWithSameUserAlreadyExistsException : Exception
 {
     public AccountWithSameUserAlreadyExistsException()
     {

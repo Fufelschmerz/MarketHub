@@ -39,7 +39,7 @@ public sealed class AccountService : IAccountService
         Account? existingAccount = await _accountRepository.SingleOrDefaultAsync(accountByUserSpec,
             cancellationToken);
 
-        if (existingAccount != null)
+        if (existingAccount is not null)
             throw new AccountWithSameUserAlreadyExistsException("Account with user already exists");
     }
 }

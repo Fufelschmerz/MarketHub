@@ -1,9 +1,9 @@
-﻿namespace MarketHub.Application.Services.QueryServices.Roles;
+﻿namespace MarketHub.Application.Services.QueryServices.Users.Roles;
 
-using Domain.Entities.Users.Roles;
-using Domain.Entities.Users.Roles.Enums;
-using Domain.Repositories.Users.Roles;
-using Domain.Specifications.Users.Roles;
+using MarketHub.Domain.Entities.Users.Roles;
+using MarketHub.Domain.Entities.Users.Roles.Enums;
+using MarketHub.Domain.Repositories.Users.Roles;
+using MarketHub.Domain.Specifications.Users.Roles;
 
 public sealed class RoleQueryService : QueryService<Role, IRoleRepository>,
     IRoleQueryService

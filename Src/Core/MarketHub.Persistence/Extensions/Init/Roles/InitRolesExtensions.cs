@@ -25,14 +25,9 @@ public static class InitRolesExtensions
                 Id = 1
             },
             
-            new(RoleType.Buyer, "Покупатель")
+            new(RoleType.User, "Пользователь")
             {
                 Id = 2
-            },
-            
-            new(RoleType.Seller, "Продавец")
-            {
-                Id = 3
             }
         };
     }

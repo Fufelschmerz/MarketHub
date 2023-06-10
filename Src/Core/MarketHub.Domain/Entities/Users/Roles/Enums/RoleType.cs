@@ -3,6 +3,5 @@
 public enum RoleType
 {
     Admin = 1,
-    Seller = 2,
-    Buyer = 3
+    User = 2
 }

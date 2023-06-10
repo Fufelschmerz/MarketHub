@@ -52,12 +52,12 @@ public sealed class User : Entity,
         Email = email;
     }
 
-    protected internal void SetPassword(string password)
+    public  void SetPassword(string password)
     {
         Password = new(password);
     }
 
-    protected internal void AddRoles(IEnumerable<Role> roles)
+    public void AddRoles(IEnumerable<Role> roles)
     {
         foreach (Role role in roles)
         {
