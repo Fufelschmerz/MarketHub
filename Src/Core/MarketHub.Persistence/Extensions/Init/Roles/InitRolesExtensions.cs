@@ -22,9 +22,8 @@ public static class InitRolesExtensions
         {
             new(RoleType.Admin, "Администратор")
             {
-                Id = 1
+                Id = 1,
             },
-            
             new(RoleType.User, "Пользователь")
             {
                 Id = 2

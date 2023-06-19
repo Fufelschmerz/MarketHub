@@ -2,17 +2,17 @@
 
 using Common.UniqueName;
 using Common.UniqueName.Extensions;
+using Infrastructure.Persistence.Repositories;
 using MarketHub.Domain.Entities.Users;
 using MarketHub.Domain.Exceptions.Users;
-using MarketHub.Domain.Repositories.Users;
 using Specifications;
 using MarketHub.Domain.Specifications.Users;
 
 public sealed class UserService : UniqueNameService<User>, IUserService
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IRepository<User> _userRepository;
 
-    public UserService(IUserRepository userRepository)
+    public UserService(IRepository<User> userRepository)
     {
         _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
     }

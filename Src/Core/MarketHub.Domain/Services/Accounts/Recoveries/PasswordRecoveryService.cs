@@ -4,16 +4,16 @@ using Entities.Accounts;
 using Entities.Accounts.Recoveries;
 using Events.Account.Recoveries;
 using Exceptions.Tokens;
-using Repositories.Accounts.Recoveries;
+using Infrastructure.Persistence.Repositories;
 using Specifications.Accounts.Recoveries;
 using Tokens;
 
 public sealed class PasswordRecoveryService : IPasswordRecoveryService
 {
-    private readonly IPasswordRecoveryRepository _passwordRecoveryRepository;
+    private readonly IRepository<PasswordRecovery> _passwordRecoveryRepository;
     private readonly ITokenService _tokenService;
 
-    public PasswordRecoveryService(IPasswordRecoveryRepository passwordRecoveryRepository,
+    public PasswordRecoveryService(IRepository<PasswordRecovery> passwordRecoveryRepository,
         ITokenService tokenService)
     {
         _passwordRecoveryRepository = passwordRecoveryRepository ?? throw new ArgumentNullException(nameof(passwordRecoveryRepository));

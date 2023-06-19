@@ -52,7 +52,7 @@ public sealed class User : Entity,
         Email = email;
     }
 
-    public  void SetPassword(string password)
+    public void SetPassword(string password)
     {
         Password = new(password);
     }

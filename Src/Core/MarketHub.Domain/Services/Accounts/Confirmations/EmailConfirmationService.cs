@@ -4,16 +4,16 @@ using Entities.Accounts;
 using Entities.Accounts.Confirmations;
 using Events.Account.Confirmations;
 using Exceptions.Tokens;
-using Repositories.Accounts.Confirmations;
+using Infrastructure.Persistence.Repositories;
 using Specifications.Accounts.Confirmations;
 using Tokens;
 
 public sealed class EmailConfirmationService : IEmailConfirmationService
 {
-    private readonly IEmailConfirmationRepository _emailConfirmationRepository;
+    private readonly IRepository<EmailConfirmation> _emailConfirmationRepository;
     private readonly ITokenService _tokenService;
 
-    public EmailConfirmationService(IEmailConfirmationRepository emailConfirmationRepository,
+    public EmailConfirmationService(IRepository<EmailConfirmation> emailConfirmationRepository,
         ITokenService tokenService)
     {
         _emailConfirmationRepository = emailConfirmationRepository ?? throw new ArgumentNullException(nameof(emailConfirmationRepository));

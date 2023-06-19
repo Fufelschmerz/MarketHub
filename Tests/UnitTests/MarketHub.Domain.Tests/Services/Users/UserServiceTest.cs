@@ -3,8 +3,8 @@ namespace MarketHub.Domain.Tests.Services.Users;
 using AutoFixture;
 using MarketHub.Domain.Entities.Users;
 using Exceptions;
+using Infrastructure.Persistence.Repositories;
 using MarketHub.Domain.Exceptions.Users;
-using MarketHub.Domain.Repositories.Users;
 using MarketHub.Domain.Services.Users;
 using Specifications;
 using MarketHub.Domain.Specifications.Users;
@@ -14,7 +14,7 @@ using Xunit;
 public sealed class UserServiceTest
 {
     private readonly UserService _userService;
-    private readonly Mock<IUserRepository> _userRepositoryMock = new();
+    private readonly Mock<IRepository<User>> _userRepositoryMock = new();
 
     public UserServiceTest()
     {

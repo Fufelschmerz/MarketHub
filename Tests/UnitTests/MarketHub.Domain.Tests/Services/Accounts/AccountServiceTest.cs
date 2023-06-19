@@ -5,15 +5,15 @@ using Domain.Services.Accounts;
 using Domain.Services.Accounts.Confirmations;
 using Entities.Accounts;
 using Exceptions.Accounts;
+using Infrastructure.Persistence.Repositories;
 using Moq;
-using Repositories.Accounts;
 using Specifications.Accounts;
 using Xunit;
 
 public sealed class AccountServiceTest
 {
     private readonly AccountService _accountService;
-    private readonly Mock<IAccountRepository> _accountRepositoryMock = new();
+    private readonly Mock<IRepository<Account>> _accountRepositoryMock = new();
     private readonly Mock<IEmailConfirmationService> _emailConfirmationServiceMock = new(); 
 
     public AccountServiceTest()

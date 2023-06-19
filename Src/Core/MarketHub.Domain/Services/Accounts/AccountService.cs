@@ -3,15 +3,15 @@
 using Confirmations;
 using Entities.Accounts;
 using Exceptions.Accounts;
-using Repositories.Accounts;
+using Infrastructure.Persistence.Repositories;
 using Specifications.Accounts;
 
 public sealed class AccountService : IAccountService
 {
-    private readonly IAccountRepository _accountRepository;
+    private readonly IRepository<Account> _accountRepository;
     private readonly IEmailConfirmationService _emailConfirmationService;
 
-    public AccountService(IAccountRepository accountRepository,
+    public AccountService(IRepository<Account> accountRepository,
         IEmailConfirmationService emailConfirmationService)
     {
         _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));

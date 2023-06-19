@@ -27,7 +27,7 @@ public sealed class Account : Entity
     public bool IsEmailConfirmed { get; private set; }
     
     
-    public  void ConfirmEmail()
+    public void ConfirmEmail()
     {
         if (IsEmailConfirmed)
             throw new EmailAlreadyConfirmedException("Email is already confirmed");
@@ -35,7 +35,7 @@ public sealed class Account : Entity
         IsEmailConfirmed = true;
     }
     
-    public  void SetBalance(decimal balance)
+    public void SetBalance(decimal balance)
     {
         if (balance < 0m)
             throw new ArgumentOutOfRangeException(nameof(balance));

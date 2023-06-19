@@ -7,15 +7,15 @@ using Entities.Accounts;
 using Entities.Accounts.Confirmations;
 using Events.Account.Confirmations;
 using Exceptions.Tokens;
+using Infrastructure.Persistence.Repositories;
 using Moq;
-using Repositories.Accounts.Confirmations;
 using Specifications.Accounts.Confirmations;
 using Xunit;
 
 public sealed class EmailConfirmationServiceTest
 {
     private readonly EmailConfirmationService _emailConfirmationService;
-    private readonly Mock<IEmailConfirmationRepository> _emailConfirmationRepositoryMock = new();
+    private readonly Mock<IRepository<EmailConfirmation>> _emailConfirmationRepositoryMock = new();
     private readonly Mock<ITokenService> _tokenServiceMock = new();
 
     public EmailConfirmationServiceTest()

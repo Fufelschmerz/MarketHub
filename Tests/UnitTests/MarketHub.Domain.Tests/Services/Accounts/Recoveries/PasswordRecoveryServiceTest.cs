@@ -7,15 +7,15 @@ using Entities.Accounts;
 using Entities.Accounts.Recoveries;
 using Events.Account.Recoveries;
 using Exceptions.Tokens;
+using Infrastructure.Persistence.Repositories;
 using Moq;
-using Repositories.Accounts.Recoveries;
 using Specifications.Accounts.Recoveries;
 using Xunit;
 
 public sealed class PasswordRecoveryServiceTest
 {
     private readonly PasswordRecoveryService _passwordRecoveryService;
-    private readonly Mock<IPasswordRecoveryRepository> _passwordRecoveryRepository = new();
+    private readonly Mock<IRepository<PasswordRecovery>> _passwordRecoveryRepository = new();
     private readonly Mock<ITokenService> _tokenServiceMock = new();
 
     public PasswordRecoveryServiceTest()

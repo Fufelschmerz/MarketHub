@@ -27,8 +27,8 @@ public sealed class DataContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.InitRoles();
-        
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DataContext).Assembly);
+        
+        modelBuilder.InitRoles();
     }
 }
