@@ -2,29 +2,30 @@ namespace MarketHub.Application.Contracts.Common.Account.Requests.PasswordRecove
 
 using Domain.Entities.Users;
 using Domain.Services.Accounts.Recoveries;
+using global::Infrastructure.Application.Services.Queries.Dispatchers;
 using Infrastructure.Exceptions.Factories;
 using MediatR;
-using Services.QueryServices.Users;
+using Services.Queries.Users;
 
 public sealed class BeginPasswordRecoveryRequestHandler : IRequestHandler<BeginPasswordRecoveryRequest>
 {
-    private readonly IUserQueryService _userQueryService;
+    private readonly IQueryDispatcher _queryDispatcher;
     private readonly IPasswordRecoveryService _passwordRecoveryService;
 
-    public BeginPasswordRecoveryRequestHandler(IUserQueryService userQueryService,
+    public BeginPasswordRecoveryRequestHandler(IQueryDispatcher queryDispatcher,
         IPasswordRecoveryService passwordRecoveryService)
     {
-        _userQueryService = userQueryService ?? throw new ArgumentNullException(nameof(userQueryService));
+        _queryDispatcher = queryDispatcher ?? throw new ArgumentNullException(nameof(queryDispatcher));
         _passwordRecoveryService = passwordRecoveryService ?? throw new ArgumentNullException(nameof(passwordRecoveryService));
     }
-    
+
     public async Task Handle(BeginPasswordRecoveryRequest request,
         CancellationToken cancellationToken)
     {
-        User user = await _userQueryService.FindByEmailAsync(request.Email,
+        User user = await _queryDispatcher.FindUserByEmailAsync(request.Email,
             cancellationToken) ?? throw ApiExceptionFactory.ObjectNotFound(nameof(User));
 
-        await _passwordRecoveryService.CreateAsync(user.Account, 
+        await _passwordRecoveryService.CreateAsync(user.Account,
             cancellationToken);
     }
 }

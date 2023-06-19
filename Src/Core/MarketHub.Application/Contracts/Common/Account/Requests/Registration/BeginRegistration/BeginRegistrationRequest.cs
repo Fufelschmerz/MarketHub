@@ -6,4 +6,4 @@ using MediatR;
 public sealed record BeginRegistrationRequest(string Name,
     string Email,
     string Password,
-    IEnumerable<RoleType> RoleTypes) : IRequest;
+    RoleType[] RoleTypes) : IRequest;

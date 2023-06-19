@@ -4,24 +4,25 @@ using global::Infrastructure.Domain.Events;
 using Domain.Entities.Accounts;
 using Domain.Entities.Users;
 using Domain.Entities.Users.Roles;
+using global::Infrastructure.Application.Services.Queries.Dispatchers;
 using MarketHub.Domain.Services.Accounts;
 using MarketHub.Domain.Services.Users;
 using MediatR;
-using Services.QueryServices.Users.Roles;
+using Services.Queries.Roles;
 
 public sealed class BeginRegistrationRequestHandler : IRequestHandler<BeginRegistrationRequest>
 {
-    private readonly IRoleQueryService _roleQueryService;
+    private readonly IQueryDispatcher _queryDispatcher;
     private readonly IUserService _userService;
     private readonly IAccountService _accountService;
     private readonly IMediator _mediator;
 
-    public BeginRegistrationRequestHandler(IRoleQueryService roleQueryService,
+    public BeginRegistrationRequestHandler(IQueryDispatcher queryDispatcher,
         IUserService userService,
         IAccountService accountService,
         IMediator mediator)
     {
-        _roleQueryService = roleQueryService ?? throw new ArgumentNullException(nameof(roleQueryService));
+        _queryDispatcher = queryDispatcher ?? throw new ArgumentNullException(nameof(queryDispatcher));
         _userService = userService ?? throw new ArgumentNullException(nameof(userService));
         _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
@@ -30,7 +31,7 @@ public sealed class BeginRegistrationRequestHandler : IRequestHandler<BeginRegis
     public async Task Handle(BeginRegistrationRequest request,
         CancellationToken cancellationToken)
     {
-        IReadOnlyList<Role> roles = await _roleQueryService.FindRolesByTypesAsync(request.RoleTypes,
+        IReadOnlyList<Role> roles = await _queryDispatcher.FindRolesByTypesAsync(request.RoleTypes,
             cancellationToken);
 
         User user = new(request.Name,

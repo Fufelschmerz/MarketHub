@@ -2,29 +2,31 @@
 
 using System.Security.Claims;
 using global::Infrastructure.Application.Authentication.Data;
-using MarketHub.Application.Infrastructure.Exceptions.Factories;
-using MarketHub.Application.Infrastructure.Identity.Claims.Factories;
-using MarketHub.Application.Services.AuthenticationServices;
-using MarketHub.Application.Services.QueryServices.Users;
-using MarketHub.Domain.Entities.Users;
+using global::Infrastructure.Application.Services.Queries.Dispatchers;
+using Infrastructure.Exceptions.Factories;
+using Infrastructure.Identity.Claims.Factories;
+using Services.AuthenticationServices;
+using Domain.Entities.Users;
 using MediatR;
+using Services.Queries.Users;
 
 public sealed class LoginRequestHandler : IRequestHandler<LoginRequest, LoginResponse>
 {
-    private readonly IUserQueryService _userQueryService;
+    private readonly IQueryDispatcher _queryDispatcher;
     private readonly IAuthenticationService _authenticationService;
 
-    public LoginRequestHandler(IUserQueryService userQueryService,
+    public LoginRequestHandler(IQueryDispatcher queryDispatcher,
         IAuthenticationService authenticationService)
     {
-        _userQueryService = userQueryService ?? throw new ArgumentNullException(nameof(userQueryService));
+        _queryDispatcher = queryDispatcher ?? throw new ArgumentNullException(nameof(queryDispatcher));
         _authenticationService = authenticationService ?? throw new ArgumentNullException(nameof(authenticationService));
     }
 
     public async Task<LoginResponse> Handle(LoginRequest request,
         CancellationToken cancellationToken)
     {
-        User? user = await _userQueryService.FindByEmailAsync(request.Email,
+        User? user = await _queryDispatcher.ExecuteAsync<FindUserByEmailQuery, User?>(
+            new FindUserByEmailQuery(request.Email),
             cancellationToken);
 
         if (user is null || !user.Password.Check(request.Password))
