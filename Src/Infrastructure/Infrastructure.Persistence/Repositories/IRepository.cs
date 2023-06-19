@@ -9,9 +9,15 @@ public interface IRepository<TEntity>
     Task AddAsync(TEntity entity,
         CancellationToken cancellationToken = default);
 
-    Task AddRangeAsync(IEnumerable<TEntity> entity,
+    Task AddRangeAsync(IEnumerable<TEntity> entities,
         CancellationToken cancellationToken = default);
 
+    Task UpdateAsync(TEntity entity,
+        CancellationToken cancellationToken = default);
+
+    Task UpdateRangeAsync(IEnumerable<TEntity> entities,
+        CancellationToken cancellationToken = default);
+    
     Task DeleteAsync(TEntity entity,
         CancellationToken cancellationToken = default);
 

@@ -2,11 +2,10 @@
 
 using Infrastructure.Specifications.Evaluator.Specification;
 using MarketHub.Domain.Entities.Users;
-using MarketHub.Domain.Repositories.Users;
 using Repositories;
 using Microsoft.EntityFrameworkCore;
 
-public sealed class UserRepository : Repository<User>, IUserRepository
+public sealed class UserRepository : Repository<User>
 {
     public UserRepository(DataContext dataContext,
         ISpecificationEvaluator specificationEvaluator)

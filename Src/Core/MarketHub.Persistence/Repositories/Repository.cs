@@ -6,15 +6,15 @@ using Infrastructure.Specifications;
 using Infrastructure.Specifications.Evaluator.Specification;
 using Microsoft.EntityFrameworkCore;
 
-public abstract class Repository<TEntity> : IRepository<TEntity>
+public class Repository<TEntity> : IRepository<TEntity>
     where TEntity : class, IEntity
 {
     private readonly DataContext _dataContext;
-
+    private readonly ISpecificationEvaluator _specificationEvaluator;
+    
     protected readonly DbSet<TEntity> _entities;
-    protected readonly ISpecificationEvaluator _specificationEvaluator;
 
-    protected Repository(DataContext dataContext,
+    public Repository(DataContext dataContext,
         ISpecificationEvaluator specificationEvaluator)
     {
         _dataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
@@ -29,7 +29,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity>
         CancellationToken cancellationToken = default)
     {
         _entities.Add(entity);
-
+        
         return _dataContext.SaveChangesAsync(cancellationToken);
     }
 
@@ -37,6 +37,22 @@ public abstract class Repository<TEntity> : IRepository<TEntity>
         CancellationToken cancellationToken = default)
     {
         _entities.AddRange(entities);
+
+        return _dataContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public Task UpdateAsync(TEntity entity,
+        CancellationToken cancellationToken = default)
+    {
+        _entities.Update(entity);
+
+        return _dataContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public Task UpdateRangeAsync(IEnumerable<TEntity> entities,
+        CancellationToken cancellationToken = default)
+    {
+        _entities.UpdateRange(entities);
 
         return _dataContext.SaveChangesAsync(cancellationToken);
     }
