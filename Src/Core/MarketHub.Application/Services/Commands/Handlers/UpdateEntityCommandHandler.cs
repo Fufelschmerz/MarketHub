@@ -17,7 +17,7 @@ public sealed class UpdateEntityCommandHandler<TEntity> : ICommandHandler<Update
     public Task HandleAsync(UpdateEntityCommand<TEntity> command,
         CancellationToken cancellationToken = default)
     {
-        return _repository.AddAsync(command.Entity,
+        return _repository.UpdateAsync(command.Entity,
             cancellationToken);
     }
 }

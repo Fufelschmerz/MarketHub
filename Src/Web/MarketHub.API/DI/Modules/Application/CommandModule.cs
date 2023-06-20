@@ -5,7 +5,7 @@ using Infrastructure.Application.Services.Commands;
 using Infrastructure.Application.Services.Commands.Dispatchers;
 using MarketHub.Application.Services.Commands.Handlers;
 
-public class CommandModule : Module
+internal sealed class CommandModule : Module
 {
     protected override void Load(ContainerBuilder builder)
     {
