@@ -3,6 +3,7 @@
 using Domain.Entities.Accounts;
 using Domain.Entities.Accounts.Confirmations;
 using Domain.Entities.Accounts.Recoveries;
+using Domain.Entities.Messaging.EmailMessaging;
 using Domain.Entities.Users;
 using Domain.Entities.Users.Roles;
 using Extensions.Init.Roles;
@@ -24,6 +25,8 @@ public sealed class DataContext : DbContext
     public DbSet<PasswordRecovery> PasswordRecoveries => Set<PasswordRecovery>();
 
     public DbSet<EmailConfirmation> EmailConfirmations => Set<EmailConfirmation>();
+
+    public DbSet<EmailMessageTemplate> EmailMessageTemplates => Set<EmailMessageTemplate>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
