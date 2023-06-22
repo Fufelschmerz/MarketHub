@@ -26,7 +26,6 @@ public sealed class AuthenticationController : MarketHubApiController
     
     [HttpPost]
     [Route("login")]
-    [AllowAnonymous]
     [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<IActionResult> Login(LoginRequest request) =>
@@ -34,9 +33,9 @@ public sealed class AuthenticationController : MarketHubApiController
     
     [HttpPost]
     [Route("refresh-token")]
-    [Authorize]
     [ProducesResponseType(typeof(RefreshTokenResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [Authorize]
     public Task<IActionResult> RefreshToken(RefreshTokenRequest request) =>
         this.RequestAsync<RefreshTokenRequest, RefreshTokenResponse>(request);
     

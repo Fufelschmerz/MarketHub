@@ -11,7 +11,7 @@ internal sealed class AuthenticationModule : ConfiguredModule
     protected override void Load(ContainerBuilder builder)
     {
         JwtOptions jwtOptions = Configuration.GetSection("Jwt:Authentication:Parameters")
-            .Get<JwtOptions>()!;
+            .Get<JwtOptions>() ?? throw new ArgumentNullException(nameof(JwtOptions));
 
         builder.RegisterType<AccessBuilder>()
             .AsImplementedInterfaces()
