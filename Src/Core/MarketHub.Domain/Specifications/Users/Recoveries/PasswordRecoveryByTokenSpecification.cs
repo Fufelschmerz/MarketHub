@@ -1,13 +1,13 @@
-namespace MarketHub.Domain.Specifications.Accounts.Recoveries;
+namespace MarketHub.Domain.Specifications.Users.Recoveries;
 
-using Entities.Accounts.Recoveries;
 using Infrastructure.Specifications;
+using MarketHub.Domain.Entities.Users.Recoveries;
 
 public sealed class PasswordRecoveryByTokenSpecification : Specification<PasswordRecovery>
 {
     public PasswordRecoveryByTokenSpecification(string token)
     {
         Query.Where(x => x.Token == token)
-            .Include(x => x.Account);
+            .Include(x => x.User);
     }
 }

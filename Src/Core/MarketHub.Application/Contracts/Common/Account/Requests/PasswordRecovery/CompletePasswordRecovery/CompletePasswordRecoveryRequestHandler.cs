@@ -1,6 +1,6 @@
 namespace MarketHub.Application.Contracts.Common.Account.Requests.PasswordRecovery.CompletePasswordRecovery;
 
-using Domain.Services.Accounts.Recoveries;
+using Domain.Services.Users.Recoveries;
 using MediatR;
 
 public sealed record CompletePasswordRecoveryRequestHandler : IRequestHandler<CompletePasswordRecoveryRequest>

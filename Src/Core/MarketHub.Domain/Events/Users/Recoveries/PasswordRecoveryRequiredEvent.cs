@@ -1,6 +1,6 @@
-namespace MarketHub.Domain.Events.Account.Recoveries;
+namespace MarketHub.Domain.Events.Users.Recoveries;
 
-using Entities.Accounts.Recoveries;
 using Infrastructure.Domain.Events;
+using MarketHub.Domain.Entities.Users.Recoveries;
 
 public sealed record PasswordRecoveryRequiredEvent(PasswordRecovery PasswordRecovery) : IDomainEvent;

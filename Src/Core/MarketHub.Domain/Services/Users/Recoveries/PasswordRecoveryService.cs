@@ -1,11 +1,12 @@
-namespace MarketHub.Domain.Services.Accounts.Recoveries;
+namespace MarketHub.Domain.Services.Users.Recoveries;
 
-using Entities.Accounts;
-using Entities.Accounts.Recoveries;
-using Events.Account.Recoveries;
-using Exceptions.Tokens;
+using Entities.Users;
+using Events.Users.Recoveries;
+using Exceptions.Users.Recoveries;
 using Infrastructure.Persistence.Repositories;
-using Specifications.Accounts.Recoveries;
+using MarketHub.Domain.Entities.Users.Recoveries;
+using MarketHub.Domain.Exceptions.Tokens;
+using Specifications.Users.Recoveries;
 using Tokens;
 
 public sealed class PasswordRecoveryService : IPasswordRecoveryService
@@ -20,18 +21,18 @@ public sealed class PasswordRecoveryService : IPasswordRecoveryService
         _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
     }
 
-    public async Task CreateAsync(Account account,
+    public async Task CreateAsync(User user,
         CancellationToken cancellationToken = default)
     {
         string passwordRecoveryToken = _tokenService.Create();
 
-        PasswordRecovery passwordRecovery = new(account,
+        PasswordRecovery passwordRecovery = new(user,
             passwordRecoveryToken);
 
         await _passwordRecoveryRepository.AddAsync(passwordRecovery,
             cancellationToken);
         
-        account.RaiseDomainEvent(new PasswordRecoveryRequiredEvent(passwordRecovery));
+        user.RaiseDomainEvent(new PasswordRecoveryRequiredEvent(passwordRecovery));
     }
 
     public async Task RecoverAsync(string token,
@@ -43,8 +44,11 @@ public sealed class PasswordRecoveryService : IPasswordRecoveryService
         PasswordRecovery passwordRecovery = await _passwordRecoveryRepository.SingleOrDefaultAsync(
             passwordRecoveryByTokenSpec,
             cancellationToken) ?? throw new InvalidTokenException("Invalid password recovery token");
+
+        if (passwordRecovery.IsExpired)
+            throw new PasswordRecoveryExpiredException("The password recovery period has expired");
         
-        passwordRecovery.Account.User.SetPassword(newPassword);
+        passwordRecovery.User.SetPassword(newPassword);
         
         await _passwordRecoveryRepository.DeleteAsync(passwordRecovery,
             cancellationToken);

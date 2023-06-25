@@ -5,6 +5,7 @@ using Domain.Exceptions.Accounts;
 using Domain.Exceptions.Accounts.Confirmations;
 using Domain.Exceptions.Tokens;
 using Domain.Exceptions.Users;
+using Domain.Exceptions.Users.Recoveries;
 using global::Infrastructure.Application.Exceptions.Attributes;
 
 public static class ApiExceptionExtensionCodes
@@ -27,6 +28,9 @@ public static class ApiExceptionExtensionCodes
 
     [MapDomainException(typeof(AccountWithSameUserAlreadyExistsException))]
     public const int AccountWithSameUserAlreadyExists = 1005;
+
+    [MapDomainException(typeof(PasswordRecoveryExpiredException))]
+    public const int PasswordRecoveryExpiredException = 1006;
     
-    public const int WrongCredentials = 1008;
+    public const int WrongCredentials = 1100;
 }

@@ -1,11 +1,11 @@
-namespace MarketHub.Domain.Services.Accounts.Recoveries;
+namespace MarketHub.Domain.Services.Users.Recoveries;
 
-using Entities.Accounts;
+using Entities.Users;
 using Infrastructure.Domain.Services;
 
 public interface IPasswordRecoveryService : IDomainService
 {
-    Task CreateAsync(Account account,
+    Task CreateAsync(User user,
         CancellationToken cancellationToken = default);
 
     Task RecoverAsync(string token,

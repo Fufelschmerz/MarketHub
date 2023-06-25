@@ -1,15 +1,15 @@
-namespace MarketHub.Domain.Tests.Services.Accounts.Recoveries;
+namespace MarketHub.Domain.Tests.Services.Users.Recoveries;
 
 using AutoFixture;
-using Domain.Services.Accounts.Recoveries;
-using Domain.Services.Tokens;
-using Entities.Accounts;
-using Entities.Accounts.Recoveries;
-using Events.Account.Recoveries;
-using Exceptions.Tokens;
+using Entities.Users;
+using Events.Users.Recoveries;
 using Infrastructure.Persistence.Repositories;
+using MarketHub.Domain.Entities.Users.Recoveries;
+using Exceptions.Tokens;
+using MarketHub.Domain.Services.Tokens;
+using MarketHub.Domain.Services.Users.Recoveries;
 using Moq;
-using Specifications.Accounts.Recoveries;
+using Specifications.Users.Recoveries;
 using Xunit;
 
 public sealed class PasswordRecoveryServiceTest
@@ -29,18 +29,18 @@ public sealed class PasswordRecoveryServiceTest
     {
         //arrange
         const string token = "0af26eca75fa4b9ca095428989c29e48";
-        Account fakeAccount = new Fixture()
-            .Build<Account>()
+        User fakeUser = new Fixture()
+            .Build<User>()
             .Create();
 
         _tokenServiceMock.Setup(x => x.Create())
             .Returns(token);
 
         //act
-        await _passwordRecoveryService.CreateAsync(fakeAccount);
+        await _passwordRecoveryService.CreateAsync(fakeUser);
 
         //assert
-        Assert.Contains(fakeAccount.DomainEvents,
+        Assert.Contains(fakeUser.DomainEvents,
             x => x is PasswordRecoveryRequiredEvent);
     }
 
@@ -65,21 +65,21 @@ public sealed class PasswordRecoveryServiceTest
         //arrange
         const string token = "0af26eca75fa4b9ca095428989c29e48";
         const string newPassword = "text_new_password";
-        Account fakeAccount = new Fixture()
-            .Build<Account>()
+        User fakeUser = new Fixture()
+            .Build<User>()
             .Create();
 
         _passwordRecoveryRepository.Setup(x => x.SingleOrDefaultAsync(
                 It.IsAny<PasswordRecoveryByTokenSpecification>(),
                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new PasswordRecovery(fakeAccount,
+            .ReturnsAsync(new PasswordRecovery(fakeUser,
                 token));
-        
+
         //act
         await _passwordRecoveryService.RecoverAsync(token,
             newPassword);
-        
+
         //assert
-        Assert.True(fakeAccount.User.Password.Check(newPassword));
+        Assert.True(fakeUser.Password.Check(newPassword));
     }
 }
