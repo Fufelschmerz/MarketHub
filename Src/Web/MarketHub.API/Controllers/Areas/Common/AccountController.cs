@@ -1,9 +1,10 @@
 namespace MarketHub.API.Controllers.Areas.Common;
 
+using Application.Contracts.Common.Account.Requests.EmailConfirmation.BeginEmailConfirmation;
+using Application.Contracts.Common.Account.Requests.EmailConfirmation.CompleteEmailConfirmation;
 using Application.Contracts.Common.Account.Requests.PasswordRecovery.BeginPasswordRecovery;
 using Application.Contracts.Common.Account.Requests.PasswordRecovery.CompletePasswordRecovery;
-using Application.Contracts.Common.Account.Requests.Registration.BeginRegistration;
-using Application.Contracts.Common.Account.Requests.Registration.CompleteRegistration;
+using Application.Contracts.Common.Account.Requests.Registration;
 using Constants;
 using Infrastructure.API.Controllers;
 using Infrastructure.API.Controllers.Extensions;
@@ -26,16 +27,9 @@ public sealed class AccountController : MarketHubApiController
     }
 
     [HttpPost]
-    [Route("begin-registration")]
+    [Route("registration")]
     [AllowAnonymous]
-    public Task<IActionResult> BeginRegistration(BeginRegistrationRequest request) =>
-        this.RequestAsync(request);
-
-
-    [HttpPost]
-    [Route("complete-registration")]
-    [Authorize]
-    public Task<IActionResult> CompleteRegistration(CompleteRegistrationRequest request) =>
+    public Task<IActionResult> Registration(RegistrationRequest request) =>
         this.RequestAsync(request);
 
     [HttpPost]
@@ -48,5 +42,17 @@ public sealed class AccountController : MarketHubApiController
     [Route("complete-password-recovery")]
     [AllowAnonymous]
     public Task<IActionResult> CompletePasswordRecovery(CompletePasswordRecoveryRequest request) =>
+        this.RequestAsync(request);
+
+    [HttpPost]
+    [Route("begin-email-confirmation")]
+    [Authorize]
+    public Task<IActionResult> BeginEmailConfirmation(BeginEmailConfirmationRequest request) =>
+        this.RequestAsync(request);
+
+    [HttpPost]
+    [Route("complete-email-confirmation")]
+    [Authorize]
+    public Task<IActionResult> CompleteEmailConfirmation(CompleteEmailConfirmationRequest request) =>
         this.RequestAsync(request);
 }

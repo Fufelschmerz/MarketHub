@@ -2,7 +2,6 @@
 
 using AutoFixture;
 using Domain.Services.Accounts;
-using Domain.Services.Accounts.Confirmations;
 using Entities.Accounts;
 using Exceptions.Accounts;
 using Infrastructure.Persistence.Repositories;
@@ -14,12 +13,10 @@ public sealed class AccountServiceTest
 {
     private readonly AccountService _accountService;
     private readonly Mock<IRepository<Account>> _accountRepositoryMock = new();
-    private readonly Mock<IEmailConfirmationService> _emailConfirmationServiceMock = new(); 
 
     public AccountServiceTest()
     {
-        _accountService = new AccountService(_accountRepositoryMock.Object,
-            _emailConfirmationServiceMock.Object);
+        _accountService = new AccountService(_accountRepositoryMock.Object);
     }
 
     [Fact]

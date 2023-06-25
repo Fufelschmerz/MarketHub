@@ -1,23 +1,23 @@
-﻿namespace MarketHub.Application.Contracts.Common.Account.Requests.Registration.BeginRegistration;
+﻿namespace MarketHub.Application.Contracts.Common.Account.Requests.Registration;
 
+using global::Infrastructure.Application.Services.Queries.Dispatchers;
 using global::Infrastructure.Domain.Events;
+using Services.Queries.Roles;
 using Domain.Entities.Accounts;
 using Domain.Entities.Users;
 using Domain.Entities.Users.Roles;
-using global::Infrastructure.Application.Services.Queries.Dispatchers;
 using MarketHub.Domain.Services.Accounts;
 using MarketHub.Domain.Services.Users;
 using MediatR;
-using Services.Queries.Roles;
 
-public sealed class BeginRegistrationRequestHandler : IRequestHandler<BeginRegistrationRequest>
+public sealed class RegistrationRequestHandler : IRequestHandler<RegistrationRequest>
 {
     private readonly IQueryDispatcher _queryDispatcher;
     private readonly IUserService _userService;
     private readonly IAccountService _accountService;
     private readonly IMediator _mediator;
 
-    public BeginRegistrationRequestHandler(IQueryDispatcher queryDispatcher,
+    public RegistrationRequestHandler(IQueryDispatcher queryDispatcher,
         IUserService userService,
         IAccountService accountService,
         IMediator mediator)
@@ -28,7 +28,7 @@ public sealed class BeginRegistrationRequestHandler : IRequestHandler<BeginRegis
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
-    public async Task Handle(BeginRegistrationRequest request,
+    public async Task Handle(RegistrationRequest request,
         CancellationToken cancellationToken)
     {
         IReadOnlyList<Role> roles = await _queryDispatcher.FindRolesByTypesAsync(request.RoleTypes,

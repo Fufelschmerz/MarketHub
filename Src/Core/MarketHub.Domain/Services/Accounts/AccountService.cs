@@ -9,13 +9,10 @@ using Specifications.Accounts;
 public sealed class AccountService : IAccountService
 {
     private readonly IRepository<Account> _accountRepository;
-    private readonly IEmailConfirmationService _emailConfirmationService;
 
-    public AccountService(IRepository<Account> accountRepository,
-        IEmailConfirmationService emailConfirmationService)
+    public AccountService(IRepository<Account> accountRepository)
     {
         _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
-        _emailConfirmationService = emailConfirmationService ?? throw new ArgumentNullException(nameof(emailConfirmationService));
     }
 
     public async Task RegistrationAsync(Account account,
@@ -25,9 +22,6 @@ public sealed class AccountService : IAccountService
             cancellationToken);
 
         await _accountRepository.AddAsync(account,
-            cancellationToken);
-
-        await _emailConfirmationService.CreateAsync(account,
             cancellationToken);
     }
     
