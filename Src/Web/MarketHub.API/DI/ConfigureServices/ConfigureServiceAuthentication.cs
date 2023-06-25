@@ -1,5 +1,6 @@
 ﻿namespace MarketHub.API.DI.ConfigureServices;
 
+using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
 using Application.Infrastructure.Cache;
 using Application.Infrastructure.Exceptions.Factories;
@@ -15,6 +16,8 @@ internal static class ConfigureServiceAuthentication
 {
     internal static IServiceCollection ConfigureAuthentication(this IServiceCollection services)
     {
+        JwtSecurityTokenHandler.DefaultMapInboundClaims  = false;
+        
         services.AddAuthentication(opt =>
         {
             opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

@@ -39,6 +39,7 @@ void ConfigurationServices()
     builder.Services.AddControllers();
     builder.Services.ConfigureMediatR();
     builder.Services.ConfigureAuthentication();
+    builder.Services.ConfigureAuthorization();
     builder.Services.ConfigureDbContext(builder.Configuration);
     builder.Services.ConfigureAutoMapper();
     builder.Services.ConfigureFluentValidation();
