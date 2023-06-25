@@ -1,8 +1,8 @@
 ﻿namespace MarketHub.Domain.Specifications.Users.Roles;
 
-using Entities.Users.Roles;
-using Entities.Users.Roles.Enums;
 using Infrastructure.Specifications;
+using MarketHub.Domain.Entities.Users.Roles;
+using MarketHub.Domain.Entities.Users.Roles.Enums;
 
 public sealed class RoleByTypeSpecification : Specification<Role>
 {

@@ -1,6 +1,6 @@
-﻿namespace MarketHub.Domain.Events.Account.Confirmations;
+﻿namespace MarketHub.Domain.Events.Accounts.Confirmations;
 
-using Entities.Accounts.Confirmations;
 using Infrastructure.Domain.Events;
+using MarketHub.Domain.Entities.Accounts.Confirmations;
 
 public sealed record EmailConfirmationRequiredEvent(EmailConfirmation EmailConfirmation) : IDomainEvent;

@@ -6,7 +6,7 @@ using Infrastructure.Persistence.Repositories;
 using MarketHub.Domain.Entities.Users;
 using MarketHub.Domain.Exceptions.Users;
 using Specifications;
-using MarketHub.Domain.Specifications.Users;
+using Specifications.Users;
 
 public sealed class UserService : UniqueNameService<User>, IUserService
 {
@@ -30,22 +30,22 @@ public sealed class UserService : UniqueNameService<User>, IUserService
             cancellationToken);
     }
 
-    private async Task CheckIsUserWithEmailExistAsync(string newEmail,
+    private async Task CheckIsUserWithEmailExistAsync(string email,
         CancellationToken cancellationToken = default)
     {
-        UserByEmailSpecification userByEmailSpec = new(newEmail);
+        UserByEmailSpecification userByEmailSpec = new(email);
 
         User? existingUser = await _userRepository.SingleOrDefaultAsync(userByEmailSpec,
             cancellationToken);
 
         if (existingUser is not null)
-            throw new UserWithSameEmailAlreadyExistsException($"User with email {newEmail} already exists");
+            throw new UserWithSameEmailAlreadyExistsException($"User with email {email} already exists");
     }
 
-    protected internal override Task<User?> FindWithSameNameAsync(string newName,
+    protected internal override Task<User?> FindWithSameNameAsync(string name,
         CancellationToken cancellationToken = default)
     {
-        EntityByNameSpecification<User> entityByNameSpec = new(newName);
+        EntityByNameSpecification<User> entityByNameSpec = new(name);
 
         return _userRepository.SingleOrDefaultAsync(entityByNameSpec,
             cancellationToken);

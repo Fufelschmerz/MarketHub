@@ -28,6 +28,7 @@ public sealed class AuthenticationController : MarketHubApiController
     [Route("login")]
     [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [AllowAnonymous]
     public Task<IActionResult> Login(LoginRequest request) =>
         this.RequestAsync<LoginRequest, LoginResponse>(request);
     

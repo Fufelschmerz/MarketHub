@@ -5,6 +5,6 @@ using Abstractions;
 public abstract class UniqueNameService<T>
     where T : IHasUniqueName
 { 
-    protected internal abstract Task<T?> FindWithSameNameAsync(string newName,
+    protected internal abstract Task<T?> FindWithSameNameAsync(string name,
         CancellationToken cancellationToken = default);
 }

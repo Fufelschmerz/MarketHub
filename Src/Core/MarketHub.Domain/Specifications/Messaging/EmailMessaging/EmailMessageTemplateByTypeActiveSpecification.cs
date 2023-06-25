@@ -6,7 +6,7 @@ using Infrastructure.Specifications;
 
 public sealed class EmailMessageTemplateByTypeActiveSpecification : Specification<EmailMessageTemplate>
 {
-    public EmailMessageTemplateByTypeActiveSpecification(EmailMessageTemplateTypes emailMessageTemplateType)
+    public EmailMessageTemplateByTypeActiveSpecification(EmailMessageTemplateType emailMessageTemplateType)
     {
         Query.Where(x => x.EmailMessageTemplateType == emailMessageTemplateType &&
                          x.IsActive);

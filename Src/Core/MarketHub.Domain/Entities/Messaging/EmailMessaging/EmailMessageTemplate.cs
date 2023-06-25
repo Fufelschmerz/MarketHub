@@ -9,7 +9,7 @@ public sealed class EmailMessageTemplate : Entity
     {
     }
 
-    public EmailMessageTemplate(EmailMessageTemplateTypes emailMessageTemplateType,
+    public EmailMessageTemplate(EmailMessageTemplateType emailMessageTemplateType,
         string name,
         string? description,
         string subject,
@@ -23,7 +23,7 @@ public sealed class EmailMessageTemplate : Entity
         SetUpdatedDate();
     }
 
-    public EmailMessageTemplateTypes EmailMessageTemplateType { get; private set; }
+    public EmailMessageTemplateType EmailMessageTemplateType { get; private set; }
     
     public string Name { get; private set; }
     
@@ -37,7 +37,7 @@ public sealed class EmailMessageTemplate : Entity
 
     public bool IsActive { get; private set; }
 
-    public void SetEmailMessagingTemplateType(EmailMessageTemplateTypes emailMessageTemplateType)
+    public void SetEmailMessagingTemplateType(EmailMessageTemplateType emailMessageTemplateType)
     {
         EmailMessageTemplateType = emailMessageTemplateType;
     }

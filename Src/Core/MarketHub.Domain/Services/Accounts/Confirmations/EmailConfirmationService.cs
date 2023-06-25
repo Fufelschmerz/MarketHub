@@ -2,7 +2,7 @@ namespace MarketHub.Domain.Services.Accounts.Confirmations;
 
 using Entities.Accounts;
 using Entities.Accounts.Confirmations;
-using Events.Account.Confirmations;
+using Events.Accounts.Confirmations;
 using Exceptions.Tokens;
 using Infrastructure.Persistence.Repositories;
 using Specifications.Accounts.Confirmations;

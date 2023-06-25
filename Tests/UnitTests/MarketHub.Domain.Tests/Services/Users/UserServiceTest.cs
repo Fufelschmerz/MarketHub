@@ -7,8 +7,8 @@ using Infrastructure.Persistence.Repositories;
 using MarketHub.Domain.Exceptions.Users;
 using MarketHub.Domain.Services.Users;
 using Specifications;
-using MarketHub.Domain.Specifications.Users;
 using Moq;
+using Specifications.Users;
 using Xunit;
 
 public sealed class UserServiceTest

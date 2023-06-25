@@ -5,7 +5,7 @@ using Domain.Services.Accounts.Confirmations;
 using Domain.Services.Tokens;
 using Entities.Accounts;
 using Entities.Accounts.Confirmations;
-using Events.Account.Confirmations;
+using Events.Accounts.Confirmations;
 using Exceptions.Tokens;
 using Infrastructure.Persistence.Repositories;
 using Moq;

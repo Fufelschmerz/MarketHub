@@ -21,7 +21,8 @@ void ConfigurationServices()
     builder.Services.Configure<TokenValidationParameters>(opt =>
     {
         JwtValidationOptions jwtValidationOptions = builder.Configuration
-            .GetSection("Jwt:Authentication:ValidationParameters").Get<JwtValidationOptions>()!;
+            .GetSection("Jwt:Authentication:ValidationParameters")
+            .Get<JwtValidationOptions>() ?? throw new ArgumentNullException(nameof(jwtValidationOptions));
 
         opt.ValidateIssuer = jwtValidationOptions.ValidateIssuer;
         opt.ValidIssuer = jwtValidationOptions.Issuer;
