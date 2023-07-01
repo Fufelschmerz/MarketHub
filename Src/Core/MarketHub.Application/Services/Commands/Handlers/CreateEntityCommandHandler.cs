@@ -7,17 +7,17 @@ using global::Infrastructure.Persistence.Repositories;
 public sealed class CreateEntityCommandHandler<TEntity> : ICommandHandler<CreateEntityCommand<TEntity>>
     where TEntity : class, IEntity
 {
-    private readonly IRepository<TEntity> _repository;
+    private readonly IDbRepository<TEntity> _dbRepository;
 
-    public CreateEntityCommandHandler(IRepository<TEntity> repository)
+    public CreateEntityCommandHandler(IDbRepository<TEntity> dbRepository)
     {
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        _dbRepository = dbRepository ?? throw new ArgumentNullException(nameof(dbRepository));
     }
 
     public Task HandleAsync(CreateEntityCommand<TEntity> command,
         CancellationToken cancellationToken = default)
     {
-        return _repository.AddAsync(command.Entity,
+        return _dbRepository.AddAsync(command.Entity,
             cancellationToken);
     }
 }

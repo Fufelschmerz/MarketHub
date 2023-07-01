@@ -6,11 +6,11 @@ using Specifications.Messaging.EmailMessaging;
 
 public sealed class EmailMessageTemplateService : IEmailMessageTemplateService
 {
-    private readonly IRepository<EmailMessageTemplate> _emailMessageTemplateRepository;
+    private readonly IDbRepository<EmailMessageTemplate> _emailMessageTemplateDbRepository;
 
-    public EmailMessageTemplateService(IRepository<EmailMessageTemplate> emailMessageTemplateRepository)
+    public EmailMessageTemplateService(IDbRepository<EmailMessageTemplate> emailMessageTemplateDbRepository)
     {
-        _emailMessageTemplateRepository = emailMessageTemplateRepository ?? throw new ArgumentNullException(nameof(emailMessageTemplateRepository));
+        _emailMessageTemplateDbRepository = emailMessageTemplateDbRepository ?? throw new ArgumentNullException(nameof(emailMessageTemplateDbRepository));
     }
 
     public async Task ActivateAsync(EmailMessageTemplate emailMessageTemplate,
@@ -19,7 +19,7 @@ public sealed class EmailMessageTemplateService : IEmailMessageTemplateService
         EmailMessageTemplateByTypeActiveSpecification emailMessageTemplateByTypeActiveSpec = 
             new(emailMessageTemplate.EmailMessageTemplateType);
 
-        EmailMessageTemplate? currentActiveEmailMessageTemplate = await _emailMessageTemplateRepository
+        EmailMessageTemplate? currentActiveEmailMessageTemplate = await _emailMessageTemplateDbRepository
             .SingleOrDefaultAsync(emailMessageTemplateByTypeActiveSpec,
                 cancellationToken);
 
@@ -27,13 +27,13 @@ public sealed class EmailMessageTemplateService : IEmailMessageTemplateService
         {
             currentActiveEmailMessageTemplate.SetIsActive(false);
 
-            await _emailMessageTemplateRepository.UpdateAsync(currentActiveEmailMessageTemplate,
+            await _emailMessageTemplateDbRepository.UpdateAsync(currentActiveEmailMessageTemplate,
                 cancellationToken);
         }
 
         emailMessageTemplate.SetIsActive(true);
 
-        await _emailMessageTemplateRepository.UpdateAsync(emailMessageTemplate,
+        await _emailMessageTemplateDbRepository.UpdateAsync(emailMessageTemplate,
             cancellationToken);
     }
 }

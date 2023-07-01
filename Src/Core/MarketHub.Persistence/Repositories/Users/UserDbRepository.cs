@@ -5,9 +5,9 @@ using MarketHub.Domain.Entities.Users;
 using Repositories;
 using Microsoft.EntityFrameworkCore;
 
-public sealed class UserRepository : Repository<User>
+public sealed class UserDbRepository : DbRepository<User>
 {
-    public UserRepository(DataContext dataContext,
+    public UserDbRepository(DataContext dataContext,
         ISpecificationEvaluator specificationEvaluator)
         : base(dataContext,
             specificationEvaluator)

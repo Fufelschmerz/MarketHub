@@ -8,11 +8,11 @@ using MarketHub.Domain.Specifications.Messaging.EmailMessaging;
 public sealed class FindEmailMessageTemplateByTypeActiveQueryHandler : IQueryHandler<FindEmailMessageTemplateByTypeActiveQuery,
         EmailMessageTemplate?>
 {
-    private readonly IRepository<EmailMessageTemplate> _emailMessageTemplateRepository;
+    private readonly IDbRepository<EmailMessageTemplate> _emailMessageTemplateDbRepository;
 
-    public FindEmailMessageTemplateByTypeActiveQueryHandler(IRepository<EmailMessageTemplate> emailMessageTemplateRepository)
+    public FindEmailMessageTemplateByTypeActiveQueryHandler(IDbRepository<EmailMessageTemplate> emailMessageTemplateDbRepository)
     {
-        _emailMessageTemplateRepository = emailMessageTemplateRepository ?? throw new ArgumentNullException(nameof(emailMessageTemplateRepository));
+        _emailMessageTemplateDbRepository = emailMessageTemplateDbRepository ?? throw new ArgumentNullException(nameof(emailMessageTemplateDbRepository));
     }
 
     public Task<EmailMessageTemplate?> HandleAsync(FindEmailMessageTemplateByTypeActiveQuery query,
@@ -21,7 +21,7 @@ public sealed class FindEmailMessageTemplateByTypeActiveQueryHandler : IQueryHan
         EmailMessageTemplateByTypeActiveSpecification emailMessageTemplateByTypeActiveSpec =
             new(query.EmailMessageTemplateType);
 
-        return _emailMessageTemplateRepository.SingleOrDefaultAsync(emailMessageTemplateByTypeActiveSpec,
+        return _emailMessageTemplateDbRepository.SingleOrDefaultAsync(emailMessageTemplateByTypeActiveSpec,
             cancellationToken);
     }
 }

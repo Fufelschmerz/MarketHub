@@ -7,16 +7,16 @@ using global::Infrastructure.Persistence.Repositories;
 public sealed class FindAllQueryHandler<TEntity> : IQueryHandler<FindAllQuery, List<TEntity>>
     where TEntity : class, IEntity
 {
-    private readonly IRepository<TEntity> _repository;
+    private readonly IDbRepository<TEntity> _dbRepository;
 
-    public FindAllQueryHandler(IRepository<TEntity> repository)
+    public FindAllQueryHandler(IDbRepository<TEntity> dbRepository)
     {
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        _dbRepository = dbRepository ?? throw new ArgumentNullException(nameof(dbRepository));
     }
     
     public async Task<List<TEntity>> HandleAsync(FindAllQuery query,
         CancellationToken cancellationToken = default)
     {
-        return await _repository.GetListAsync(cancellationToken);
+        return await _dbRepository.GetListAsync(cancellationToken);
     }
 }

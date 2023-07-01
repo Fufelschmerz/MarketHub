@@ -12,7 +12,7 @@ using Xunit;
 public sealed class AccountServiceTest
 {
     private readonly AccountService _accountService;
-    private readonly Mock<IRepository<Account>> _accountRepositoryMock = new();
+    private readonly Mock<IDbRepository<Account>> _accountRepositoryMock = new();
 
     public AccountServiceTest()
     {

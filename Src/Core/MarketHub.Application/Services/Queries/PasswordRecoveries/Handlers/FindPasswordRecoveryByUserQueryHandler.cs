@@ -8,11 +8,11 @@ using global::Infrastructure.Persistence.Repositories;
 public sealed class FindPasswordRecoveryByUserQueryHandler : IQueryHandler<FindPasswordRecoveryByUserQuery, 
     PasswordRecovery?>
 {
-    private readonly IRepository<PasswordRecovery> _passwordRecoveryRepository;
+    private readonly IDbRepository<PasswordRecovery> _passwordRecoveryDbRepository;
 
-    public FindPasswordRecoveryByUserQueryHandler(IRepository<PasswordRecovery> passwordRecoveryRepository)
+    public FindPasswordRecoveryByUserQueryHandler(IDbRepository<PasswordRecovery> passwordRecoveryDbRepository)
     {
-        _passwordRecoveryRepository = passwordRecoveryRepository ?? throw new ArgumentNullException(nameof(passwordRecoveryRepository));
+        _passwordRecoveryDbRepository = passwordRecoveryDbRepository ?? throw new ArgumentNullException(nameof(passwordRecoveryDbRepository));
     }
 
     public Task<PasswordRecovery?> HandleAsync(FindPasswordRecoveryByUserQuery query,
@@ -20,7 +20,7 @@ public sealed class FindPasswordRecoveryByUserQueryHandler : IQueryHandler<FindP
     {
         PasswordRecoveryByUserSpecification passwordRecoveryByUserSpec = new(query.User);
         
-        return _passwordRecoveryRepository.SingleOrDefaultAsync(passwordRecoveryByUserSpec, 
+        return _passwordRecoveryDbRepository.SingleOrDefaultAsync(passwordRecoveryByUserSpec, 
             cancellationToken);
     }
 }

@@ -7,17 +7,17 @@ using global::Infrastructure.Persistence.Repositories;
 public sealed class FindByIdQueryHandler<TEntity> : IQueryHandler<FindByIdQuery, TEntity?>
     where TEntity : class, IEntity
 {
-    private readonly IRepository<TEntity> _repository;
+    private readonly IDbRepository<TEntity> _dbRepository;
 
-    public FindByIdQueryHandler(IRepository<TEntity> repository)
+    public FindByIdQueryHandler(IDbRepository<TEntity> dbRepository)
     {
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        _dbRepository = dbRepository ?? throw new ArgumentNullException(nameof(dbRepository));
     }
     
     public Task<TEntity?> HandleAsync(FindByIdQuery query,
         CancellationToken cancellationToken = default)
     {
-        return _repository.GetByIdAsync(query.Id,
+        return _dbRepository.GetByIdAsync(query.Id,
             cancellationToken);
     }
 }

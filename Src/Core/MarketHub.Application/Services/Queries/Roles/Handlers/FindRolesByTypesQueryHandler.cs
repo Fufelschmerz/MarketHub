@@ -7,11 +7,11 @@ using global::Infrastructure.Persistence.Repositories;
 
 public sealed record FindRolesByTypesQueryHandler : IQueryHandler<FindRolesByTypesQuery, List<Role>>
 {
-    private readonly IRepository<Role> _roleRepository;
+    private readonly IDbRepository<Role> _roleDbRepository;
 
-    public FindRolesByTypesQueryHandler(IRepository<Role> roleRepository)
+    public FindRolesByTypesQueryHandler(IDbRepository<Role> roleDbRepository)
     {
-        _roleRepository = roleRepository ?? throw new ArgumentNullException(nameof(roleRepository));
+        _roleDbRepository = roleDbRepository ?? throw new ArgumentNullException(nameof(roleDbRepository));
     }
     
     public Task<List<Role>> HandleAsync(FindRolesByTypesQuery query,
@@ -19,7 +19,7 @@ public sealed record FindRolesByTypesQueryHandler : IQueryHandler<FindRolesByTyp
     {
         RolesByTypesSpecification rolesByTypesSpecification = new(query.RoleTypes);
 
-        return _roleRepository.GetListAsync(rolesByTypesSpecification,
+        return _roleDbRepository.GetListAsync(rolesByTypesSpecification,
             cancellationToken);
     }
 }

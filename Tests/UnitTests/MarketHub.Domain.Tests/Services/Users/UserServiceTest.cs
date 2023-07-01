@@ -14,7 +14,7 @@ using Xunit;
 public sealed class UserServiceTest
 {
     private readonly UserService _userService;
-    private readonly Mock<IRepository<User>> _userRepositoryMock = new();
+    private readonly Mock<IDbRepository<User>> _userRepositoryMock = new();
 
     public UserServiceTest()
     {

@@ -15,7 +15,7 @@ using Xunit;
 public sealed class PasswordRecoveryServiceTest
 {
     private readonly PasswordRecoveryService _passwordRecoveryService;
-    private readonly Mock<IRepository<PasswordRecovery>> _passwordRecoveryRepository = new();
+    private readonly Mock<IDbRepository<PasswordRecovery>> _passwordRecoveryRepository = new();
     private readonly Mock<ITokenService> _tokenServiceMock = new();
 
     public PasswordRecoveryServiceTest()

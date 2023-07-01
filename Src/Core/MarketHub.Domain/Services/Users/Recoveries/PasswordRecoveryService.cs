@@ -11,13 +11,13 @@ using Tokens;
 
 public sealed class PasswordRecoveryService : IPasswordRecoveryService
 {
-    private readonly IRepository<PasswordRecovery> _passwordRecoveryRepository;
+    private readonly IDbRepository<PasswordRecovery> _passwordRecoveryDbRepository;
     private readonly ITokenService _tokenService;
 
-    public PasswordRecoveryService(IRepository<PasswordRecovery> passwordRecoveryRepository,
+    public PasswordRecoveryService(IDbRepository<PasswordRecovery> passwordRecoveryDbRepository,
         ITokenService tokenService)
     {
-        _passwordRecoveryRepository = passwordRecoveryRepository ?? throw new ArgumentNullException(nameof(passwordRecoveryRepository));
+        _passwordRecoveryDbRepository = passwordRecoveryDbRepository ?? throw new ArgumentNullException(nameof(passwordRecoveryDbRepository));
         _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
     }
 
@@ -29,7 +29,7 @@ public sealed class PasswordRecoveryService : IPasswordRecoveryService
         PasswordRecovery passwordRecovery = new(user,
             passwordRecoveryToken);
 
-        await _passwordRecoveryRepository.AddAsync(passwordRecovery,
+        await _passwordRecoveryDbRepository.AddAsync(passwordRecovery,
             cancellationToken);
         
         user.RaiseDomainEvent(new PasswordRecoveryRequiredEvent(passwordRecovery));
@@ -41,7 +41,7 @@ public sealed class PasswordRecoveryService : IPasswordRecoveryService
     {
         PasswordRecoveryByTokenSpecification passwordRecoveryByTokenSpec = new(token);
         
-        PasswordRecovery passwordRecovery = await _passwordRecoveryRepository.SingleOrDefaultAsync(
+        PasswordRecovery passwordRecovery = await _passwordRecoveryDbRepository.SingleOrDefaultAsync(
             passwordRecoveryByTokenSpec,
             cancellationToken) ?? throw new InvalidTokenException("Invalid password recovery token");
 
@@ -50,7 +50,7 @@ public sealed class PasswordRecoveryService : IPasswordRecoveryService
         
         passwordRecovery.User.SetPassword(newPassword);
         
-        await _passwordRecoveryRepository.DeleteAsync(passwordRecovery,
+        await _passwordRecoveryDbRepository.DeleteAsync(passwordRecovery,
             cancellationToken);
     }
 }

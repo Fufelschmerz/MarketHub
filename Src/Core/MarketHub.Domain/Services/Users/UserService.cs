@@ -10,11 +10,11 @@ using Specifications.Users;
 
 public sealed class UserService : UniqueNameService<User>, IUserService
 {
-    private readonly IRepository<User> _userRepository;
+    private readonly IDbRepository<User> _userDbRepository;
 
-    public UserService(IRepository<User> userRepository)
+    public UserService(IDbRepository<User> userDbRepository)
     {
-        _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+        _userDbRepository = userDbRepository ?? throw new ArgumentNullException(nameof(userDbRepository));
     }
 
     public async Task CreateAsync(User user,
@@ -26,7 +26,7 @@ public sealed class UserService : UniqueNameService<User>, IUserService
         await CheckIsUserWithEmailExistAsync(user.Email,
             cancellationToken);
 
-        await _userRepository.AddAsync(user,
+        await _userDbRepository.AddAsync(user,
             cancellationToken);
     }
 
@@ -35,7 +35,7 @@ public sealed class UserService : UniqueNameService<User>, IUserService
     {
         UserByEmailSpecification userByEmailSpec = new(email);
 
-        User? existingUser = await _userRepository.SingleOrDefaultAsync(userByEmailSpec,
+        User? existingUser = await _userDbRepository.SingleOrDefaultAsync(userByEmailSpec,
             cancellationToken);
 
         if (existingUser is not null)
@@ -47,7 +47,7 @@ public sealed class UserService : UniqueNameService<User>, IUserService
     {
         EntityByNameSpecification<User> entityByNameSpec = new(name);
 
-        return _userRepository.SingleOrDefaultAsync(entityByNameSpec,
+        return _userDbRepository.SingleOrDefaultAsync(entityByNameSpec,
             cancellationToken);
     }
 }

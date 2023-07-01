@@ -8,11 +8,11 @@ using Specifications.Accounts;
 
 public sealed class AccountService : IAccountService
 {
-    private readonly IRepository<Account> _accountRepository;
+    private readonly IDbRepository<Account> _accountDbRepository;
 
-    public AccountService(IRepository<Account> accountRepository)
+    public AccountService(IDbRepository<Account> accountDbRepository)
     {
-        _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
+        _accountDbRepository = accountDbRepository ?? throw new ArgumentNullException(nameof(accountDbRepository));
     }
 
     public async Task RegistrationAsync(Account account,
@@ -21,7 +21,7 @@ public sealed class AccountService : IAccountService
         await CheckIsAccountWithUserExistsAsync(account,
             cancellationToken);
 
-        await _accountRepository.AddAsync(account,
+        await _accountDbRepository.AddAsync(account,
             cancellationToken);
     }
     
@@ -30,7 +30,7 @@ public sealed class AccountService : IAccountService
     {
         AccountByUserSpecification accountByUserSpec = new(account.User.Id);
 
-        Account? existingAccount = await _accountRepository.SingleOrDefaultAsync(accountByUserSpec,
+        Account? existingAccount = await _accountDbRepository.SingleOrDefaultAsync(accountByUserSpec,
             cancellationToken);
 
         if (existingAccount is not null)

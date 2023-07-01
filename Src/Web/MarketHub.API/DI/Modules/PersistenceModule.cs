@@ -12,12 +12,12 @@ internal sealed class PersistenceModule : Module
 {
     protected override void Load(ContainerBuilder builder)
     {
-        builder.RegisterType<UserRepository>()
-            .As<IRepository<User>>()
+        builder.RegisterType<UserDbRepository>()
+            .As<IDbRepository<User>>()
             .InstancePerLifetimeScope();
         
-        builder.RegisterGeneric(typeof(Repository<>))
-            .As(typeof(IRepository<>))
+        builder.RegisterGeneric(typeof(DbRepository<>))
+            .As(typeof(IDbRepository<>))
             .InstancePerLifetimeScope();
         
         builder.RegisterType<EfCoreUnitOfWork>()

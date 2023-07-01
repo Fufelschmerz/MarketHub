@@ -7,17 +7,17 @@ using global::Infrastructure.Persistence.Repositories;
 public sealed class UpdateEntityCommandHandler<TEntity> : ICommandHandler<UpdateEntityCommand<TEntity>>
     where TEntity : class, IEntity
 {
-    private readonly IRepository<TEntity> _repository;
+    private readonly IDbRepository<TEntity> _dbRepository;
 
-    public UpdateEntityCommandHandler(IRepository<TEntity> repository)
+    public UpdateEntityCommandHandler(IDbRepository<TEntity> dbRepository)
     {
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        _dbRepository = dbRepository ?? throw new ArgumentNullException(nameof(dbRepository));
     }
 
     public Task HandleAsync(UpdateEntityCommand<TEntity> command,
         CancellationToken cancellationToken = default)
     {
-        return _repository.UpdateAsync(command.Entity,
+        return _dbRepository.UpdateAsync(command.Entity,
             cancellationToken);
     }
 }

@@ -15,7 +15,7 @@ using Xunit;
 public sealed class EmailConfirmationServiceTest
 {
     private readonly EmailConfirmationService _emailConfirmationService;
-    private readonly Mock<IRepository<EmailConfirmation>> _emailConfirmationRepositoryMock = new();
+    private readonly Mock<IDbRepository<EmailConfirmation>> _emailConfirmationRepositoryMock = new();
     private readonly Mock<ITokenService> _tokenServiceMock = new();
 
     public EmailConfirmationServiceTest()

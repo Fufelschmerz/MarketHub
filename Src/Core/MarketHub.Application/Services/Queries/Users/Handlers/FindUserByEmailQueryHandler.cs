@@ -7,11 +7,11 @@ using global::Infrastructure.Persistence.Repositories;
 
 public sealed class FindUserByEmailQueryHandler : IQueryHandler<FindUserByEmailQuery, User?>
 {
-    private readonly IRepository<User> _userRepository;
+    private readonly IDbRepository<User> _userDbRepository;
 
-    public FindUserByEmailQueryHandler(IRepository<User> userRepository)
+    public FindUserByEmailQueryHandler(IDbRepository<User> userDbRepository)
     {
-        _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+        _userDbRepository = userDbRepository ?? throw new ArgumentNullException(nameof(userDbRepository));
     }
     
     public Task<User?> HandleAsync(FindUserByEmailQuery query,
@@ -19,7 +19,7 @@ public sealed class FindUserByEmailQueryHandler : IQueryHandler<FindUserByEmailQ
     {
         UserByEmailSpecification userByEmailSpec = new(query.Email);
 
-        return _userRepository.SingleOrDefaultAsync(userByEmailSpec,
+        return _userDbRepository.SingleOrDefaultAsync(userByEmailSpec,
             cancellationToken);
     }
 }

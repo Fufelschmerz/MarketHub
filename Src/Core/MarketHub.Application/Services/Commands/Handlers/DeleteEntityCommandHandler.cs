@@ -7,17 +7,17 @@ using global::Infrastructure.Persistence.Repositories;
 public sealed class DeleteEntityCommandHandler<TEntity> : ICommandHandler<DeleteEntityCommand<TEntity>>
     where TEntity : class, IEntity
 {
-    private readonly IRepository<TEntity> _repository;
+    private readonly IDbRepository<TEntity> _dbRepository;
 
-    public DeleteEntityCommandHandler(IRepository<TEntity> repository)
+    public DeleteEntityCommandHandler(IDbRepository<TEntity> dbRepository)
     {
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        _dbRepository = dbRepository ?? throw new ArgumentNullException(nameof(dbRepository));
     }
 
     public Task HandleAsync(DeleteEntityCommand<TEntity> command,
         CancellationToken cancellationToken = default)
     {
-        return _repository.DeleteAsync(command.Entity,
+        return _dbRepository.DeleteAsync(command.Entity,
             cancellationToken);
     }
 }

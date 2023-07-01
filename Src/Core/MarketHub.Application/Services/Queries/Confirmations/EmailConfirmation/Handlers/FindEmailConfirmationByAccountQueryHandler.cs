@@ -8,11 +8,11 @@ using global::Infrastructure.Persistence.Repositories;
 public sealed class FindEmailConfirmationByAccountQueryHandler : IQueryHandler<FindEmailConfirmationByAccountQuery,
     EmailConfirmation?>
 {
-    private readonly IRepository<EmailConfirmation> _emailConfirmationRepository;
+    private readonly IDbRepository<EmailConfirmation> _emailConfirmationDbRepository;
 
-    public FindEmailConfirmationByAccountQueryHandler(IRepository<EmailConfirmation> emailConfirmationRepository)
+    public FindEmailConfirmationByAccountQueryHandler(IDbRepository<EmailConfirmation> emailConfirmationDbRepository)
     {
-        _emailConfirmationRepository = emailConfirmationRepository ?? throw new ArgumentNullException(nameof(emailConfirmationRepository));
+        _emailConfirmationDbRepository = emailConfirmationDbRepository ?? throw new ArgumentNullException(nameof(emailConfirmationDbRepository));
     }
 
     public Task<EmailConfirmation?> HandleAsync(FindEmailConfirmationByAccountQuery query,
@@ -20,7 +20,7 @@ public sealed class FindEmailConfirmationByAccountQueryHandler : IQueryHandler<F
     {
         EmailConfirmationByAccountSpecification emailConfirmationByAccountSpec = new(query.Account);
 
-        return _emailConfirmationRepository.SingleOrDefaultAsync(emailConfirmationByAccountSpec,
+        return _emailConfirmationDbRepository.SingleOrDefaultAsync(emailConfirmationByAccountSpec,
             cancellationToken);
     }
 }

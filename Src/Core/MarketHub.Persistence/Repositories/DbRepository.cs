@@ -6,7 +6,7 @@ using Infrastructure.Specifications;
 using Infrastructure.Specifications.Evaluator.Specification;
 using Microsoft.EntityFrameworkCore;
 
-public class Repository<TEntity> : IRepository<TEntity>
+public class DbRepository<TEntity> : IDbRepository<TEntity>
     where TEntity : class, IEntity
 {
     private readonly DataContext _dataContext;
@@ -14,7 +14,7 @@ public class Repository<TEntity> : IRepository<TEntity>
     
     protected readonly DbSet<TEntity> _entities;
 
-    public Repository(DataContext dataContext,
+    public DbRepository(DataContext dataContext,
         ISpecificationEvaluator specificationEvaluator)
     {
         _dataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));

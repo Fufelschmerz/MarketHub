@@ -10,13 +10,13 @@ using Tokens;
 
 public sealed class EmailConfirmationService : IEmailConfirmationService
 {
-    private readonly IRepository<EmailConfirmation> _emailConfirmationRepository;
+    private readonly IDbRepository<EmailConfirmation> _emailConfirmationDbRepository;
     private readonly ITokenService _tokenService;
 
-    public EmailConfirmationService(IRepository<EmailConfirmation> emailConfirmationRepository,
+    public EmailConfirmationService(IDbRepository<EmailConfirmation> emailConfirmationDbRepository,
         ITokenService tokenService)
     {
-        _emailConfirmationRepository = emailConfirmationRepository ?? throw new ArgumentNullException(nameof(emailConfirmationRepository));
+        _emailConfirmationDbRepository = emailConfirmationDbRepository ?? throw new ArgumentNullException(nameof(emailConfirmationDbRepository));
         _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
     }
 
@@ -28,7 +28,7 @@ public sealed class EmailConfirmationService : IEmailConfirmationService
         EmailConfirmation emailConfirmation = new(account,
             token);
 
-        await _emailConfirmationRepository.AddAsync(emailConfirmation,
+        await _emailConfirmationDbRepository.AddAsync(emailConfirmation,
             cancellationToken);
         
         account.RaiseDomainEvent(new EmailConfirmationRequiredEvent(emailConfirmation));
@@ -39,13 +39,13 @@ public sealed class EmailConfirmationService : IEmailConfirmationService
     {
         EmailConfirmationByTokenSpecification emailConfirmationByTokenSpec = new(token);
 
-        EmailConfirmation emailConfirmation = await _emailConfirmationRepository.SingleOrDefaultAsync(
+        EmailConfirmation emailConfirmation = await _emailConfirmationDbRepository.SingleOrDefaultAsync(
             emailConfirmationByTokenSpec,
             cancellationToken) ?? throw new InvalidTokenException("Invalid email confirmation token");
         
         emailConfirmation.Account.ConfirmEmail();
 
-        await _emailConfirmationRepository.DeleteAsync(emailConfirmation,
+        await _emailConfirmationDbRepository.DeleteAsync(emailConfirmation,
             cancellationToken);
     }
 }

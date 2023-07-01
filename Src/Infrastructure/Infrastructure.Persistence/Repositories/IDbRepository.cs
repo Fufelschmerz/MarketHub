@@ -3,7 +3,7 @@
 using Domain.Entities;
 using Specifications;
 
-public interface IRepository<TEntity>
+public interface IDbRepository<TEntity>
     where TEntity : class, IEntity
 {
     Task AddAsync(TEntity entity,

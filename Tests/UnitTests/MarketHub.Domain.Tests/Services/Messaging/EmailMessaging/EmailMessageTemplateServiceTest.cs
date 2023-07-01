@@ -11,7 +11,7 @@ using Xunit;
 public sealed class EmailMessageTemplateServiceTest
 {
     private readonly EmailMessageTemplateService _emailMessageTemplateService;
-    private readonly Mock<IRepository<EmailMessageTemplate>> _emailMessageTemplateRepositoryMock = new();
+    private readonly Mock<IDbRepository<EmailMessageTemplate>> _emailMessageTemplateRepositoryMock = new();
 
     public EmailMessageTemplateServiceTest()
     {
